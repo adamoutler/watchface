@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     style="@style/CardContent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical" >
 
     <TextView
         android:id="@+id/title"
@@ -20,4 +21,4 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-</LinearLayout><!-- From: file:/home/adamoutler/Desktop/watch/bigandroidbbq/wear/build/intermediates/exploded-aar/com.google.android.support/wearable/1.0.0/res/layout/watch_card_content.xml -->
+</LinearLayout><!-- From: file:/home/adamoutler/Desktop/watch/wear/build/intermediates/exploded-aar/com.google.android.support/wearable/1.0.0/res/layout/watch_card_content.xml -->

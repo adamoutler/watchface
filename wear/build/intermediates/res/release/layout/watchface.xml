@@ -31,4 +31,4 @@
         style="@style/GearsWatchLayer.Hand"
         android:src="@drawable/hand_second_normal" />
 
-</com.bigandroidbbq.widget.Watchface><!-- From: file:/home/adamoutler/Desktop/watch/bigandroidbbq/wear/src/main/res/layout/watchface.xml -->
+</com.bigandroidbbq.widget.Watchface><!-- From: file:/home/adamoutler/Desktop/watch/wear/src/main/res/layout/watchface.xml -->

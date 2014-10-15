@@ -1,22 +1,22 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android">
-
     <TextView
         android:id="@+id/dismiss_overlay_explain"
-        style="@style/DismissOverlayText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="32dp"
-        android:padding="12dp" />
-
+        android:layout_width="wrap_content"
+        android:padding="12dp"
+        style="@style/DismissOverlayText"
+        />
     <ImageView
         android:id="@+id/dismiss_overlay_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:src="@drawable/close_button" />
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:src="@drawable/close_button"
+        />
 </merge>
-<!-- From: file:/home/adamoutler/Desktop/watch/bigandroidbbq/wear/build/intermediates/exploded-aar/com.google.android.support/wearable/1.0.0/res/layout/dismiss_overlay.xml -->
+<!-- From: file:/home/adamoutler/Desktop/watch/wear/build/intermediates/exploded-aar/com.google.android.support/wearable/1.0.0/res/layout/dismiss_overlay.xml -->
