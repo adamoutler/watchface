@@ -17,21 +17,20 @@
         android:layout_marginTop="5dp"
         android:layout_weight="1.0"
 
-        />
+        android:contentDescription="gray color on back" />
 
     <TextView
         android:id="@+id/time"
-        android:layout_width="150dp"
-        android:layout_height="43dp"
-        android:layout_below="@+id/date"
+        android:layout_width="150dip"
+        android:layout_height="45dip"
         android:layout_centerHorizontal="true"
-        android:layout_column="1"
         android:layout_gravity="center_horizontal|top"
-        android:layout_marginTop="30dp"
-        android:layout_row="0"
-        android:text="12:34"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textSize="40sp" />
+        android:layout_marginTop="40dip"
+
+        android:text="88:88"
+
+        android:fontFamily="monospace"
+        android:textSize="35dip" />
 
     <ImageView
         android:id="@+id/logo"
@@ -41,7 +40,8 @@
         android:layout_column="0"
         android:layout_gravity="left|top"
         android:layout_row="0"
-        android:src="@drawable/digback" />
+        android:src="@drawable/digback"
+        android:contentDescription="background logo" />
 
     <TextView
 

@@ -100,7 +100,7 @@ public class WatchfaceDigitalActivity extends Activity implements WatchFaceLifec
 
     private void setFonts() {
         Typeface myTypeface = Typeface.createFromAsset(getAssets(), "fonts/digital-7 (mono).ttf");
-         mTime.setTypeface(myTypeface);
+        mTime.setTypeface(myTypeface);
 
     }
 
@@ -138,7 +138,6 @@ public class WatchfaceDigitalActivity extends Activity implements WatchFaceLifec
     @Override
     public void onScreenAwake() {
         super.onResume();
-        mTime.setTextSize(47);
         mTextBack.setBackgroundColor(Color.LTGRAY);
         mDate.setTextColor(Color.BLACK);
         mBABBQText.setTextColor(Color.BLACK);

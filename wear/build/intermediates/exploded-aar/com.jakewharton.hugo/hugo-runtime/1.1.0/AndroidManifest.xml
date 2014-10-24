@@ -1,6 +1,0 @@
-<!-- From: file:/Users/jw/dev/hugo/hugo-runtime/src/main/AndroidManifest.xml --><manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.0" package="hugo.weaving">
-
-  <uses-sdk android:minSdkVersion="9"/>
-
-  <application/>
-</manifest>
