@@ -28,8 +28,7 @@
             android:name=".activity.WatchfaceDigitalActivity"
             android:allowEmbedded="true"
             android:label="Digital"
-            android:taskAffinity=""
-            android:theme="@android:style/Theme.DeviceDefault.NoActionBar">
+            android:theme="@android:style/Theme.DeviceDefault" >
 
             <meta-data
                 android:name="com.google.android.clockwork.home.preview"

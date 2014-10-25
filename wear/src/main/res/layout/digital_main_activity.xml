@@ -1,24 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<FrameLayout
-xmlns:android="http://schemas.android.com/apk/res/android"
-android:layout_width="match_parent"
-android:layout_height="match_parent">
+
 
 <android.support.wearable.view.WatchViewStub
-xmlns:app="http://schemas.android.com/apk/res-auto"
-android:id="@+id/digital_watch_view_stub"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-
-app:rectLayout="@layout/digitalwatchsquare"
-app:roundLayout="@layout/digitalwatchround"/>
-
-
-
-<android.support.wearable.view.DismissOverlayView
-    android:id="@+id/dismiss_overlay"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/digital_watch_view_stub"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" />
+    android:layout_height="match_parent"
+    app:rectLayout="@layout/digitalwatchround"
+    app:roundLayout="@layout/digitalwatchround"
+    tools:context=".WatchfaceDigitalActivity"
+    tools:deviceIds="wear"
+/>
 
-</FrameLayout>
+

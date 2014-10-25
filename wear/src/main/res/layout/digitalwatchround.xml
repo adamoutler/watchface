@@ -3,7 +3,7 @@
 <RelativeLayout
 
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/watchviewstub"
+    android:id="@+id/roundwatchrelative"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:layout_column="2"
@@ -21,16 +21,15 @@
 
     <TextView
         android:id="@+id/time"
-        android:layout_width="150dip"
-        android:layout_height="45dip"
-        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal|top"
-        android:layout_marginTop="40dip"
-
         android:text="88:88"
 
         android:fontFamily="monospace"
-        android:textSize="35dip" />
+        android:textSize="30dip"
+        android:layout_below="@+id/date"
+        android:layout_alignStart="@+id/babbqText" />
 
     <ImageView
         android:id="@+id/logo"
