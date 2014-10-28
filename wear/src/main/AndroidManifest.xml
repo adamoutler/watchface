@@ -27,7 +27,7 @@
         <activity
             android:name=".watch.digital.DigitalWatchfaceActivity"
             android:allowEmbedded="true"
-            android:label="BigAndroidBBQ"
+            android:label="Digital Watch"
             android:theme="@android:style/Theme.DeviceDefault" >
 
             <meta-data
