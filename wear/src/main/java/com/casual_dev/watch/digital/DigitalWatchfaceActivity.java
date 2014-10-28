@@ -1,4 +1,4 @@
-package com.bigandroidbbq.activity;
+package com.casual_dev.watch.digital;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -9,19 +9,18 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.wearable.view.WatchViewStub;
-import android.util.Log;
 import android.view.View;
-import android.view.WindowInsets;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bigandroidbbq.R;
-import com.bigandroidbbq.WatchFaceLifecycle;
+import com.casual_dev.R;
+import com.casual_dev.watch.MyTextView;
+import com.casual_dev.watch.WatchFaceLifecycle;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public class WatchfaceDigitalActivity extends Activity implements WatchFaceLifecycle.Listener{
+public class DigitalWatchfaceActivity extends Activity implements WatchFaceLifecycle.Listener {
     /*Date change Filters*/
     private final static IntentFilter INTENT_FILTER_DATE; //Date Filter
     static {
@@ -39,7 +38,7 @@ public class WatchfaceDigitalActivity extends Activity implements WatchFaceLifec
     }
     private final String TIME_FORMAT_DISPLAYED = "kk:mm";
     private final String DATE_FORMAT_DISPLAYED = "E LLL d";
-    TextView mTime;
+    MyTextView mTime;
     TextView mDate;
     TextView mBABBQText;
     TextView blueFive;
@@ -63,7 +62,7 @@ public class WatchfaceDigitalActivity extends Activity implements WatchFaceLifec
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.digital_main_activity);
-        WatchFaceLifecycle.attach(this,savedInstanceState,this);
+        WatchFaceLifecycle.attach(this, savedInstanceState, this);
         final WatchViewStub stub = (WatchViewStub) findViewById(R.id.digital_watch_view_stub);
 
 
@@ -71,31 +70,31 @@ public class WatchfaceDigitalActivity extends Activity implements WatchFaceLifec
             @Override
             public void onLayoutInflated(WatchViewStub stub) {
 
-                Typeface myTypeface = Typeface.createFromAsset(getAssets(), "fonts/digital-7 (mono).ttf");
+                //Typeface myTypeface = Typeface.createFromAsset(getAssets(), "fonts/digital-7 (mono).ttf");
                 setWidgets();
-                setFonts();
-                mTimeInfoReceiver.onReceive(WatchfaceDigitalActivity.this, registerReceiver(null, INTENT_FILTER_TIME));    //Time.
+                mTime.resizeText();
+                //setFonts();
+                mTimeInfoReceiver.onReceive(DigitalWatchfaceActivity.this, registerReceiver(null, INTENT_FILTER_TIME));    //Time.
                 registerReceiver(mTimeInfoReceiver, INTENT_FILTER_TIME);
-                mDateInfoReceiver.onReceive(WatchfaceDigitalActivity.this, registerReceiver(null, INTENT_FILTER_DATE));    //Date.
+                mDateInfoReceiver.onReceive(DigitalWatchfaceActivity.this, registerReceiver(null, INTENT_FILTER_DATE));    //Date.
                 registerReceiver(mDateInfoReceiver, INTENT_FILTER_DATE);
 
             }
         });
 
 
-
-        }
+    }
 
     @Override
     protected void onResume() {
 
-    super.onResume();
+        super.onResume();
 
     }
 
     @Override
     protected void onPause() {
-     super.onPause();
+        super.onPause();
     }
 
     private void setFonts() {
@@ -105,7 +104,7 @@ public class WatchfaceDigitalActivity extends Activity implements WatchFaceLifec
     }
 
     private void setWidgets() {
-        mTime = (TextView) findViewById(R.id.time);
+        mTime = (MyTextView) findViewById(R.id.time);
         mDate = (TextView) findViewById(R.id.date);
         blueFive= (TextView)findViewById(R.id.blueFive);
         mBABBQText = (TextView) findViewById(R.id.babbqText);

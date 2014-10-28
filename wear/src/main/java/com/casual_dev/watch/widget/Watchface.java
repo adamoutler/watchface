@@ -1,4 +1,4 @@
-package com.bigandroidbbq.widget;
+package com.casual_dev.watch.widget;
 
 import android.content.Context;
 import android.graphics.Typeface;
@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
-import com.bigandroidbbq.R;
+import com.casual_dev.R;
 import com.twotoasters.watchface.gears.widget.IWatchface;
 import com.twotoasters.watchface.gears.widget.Watch;
 

@@ -9,10 +9,10 @@
     android:id="@+id/digital_watch_view_stub"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:rectLayout="@layout/digitalwatchround"
-    app:roundLayout="@layout/digitalwatchround"
+    app:rectLayout="@layout/digitalwatchsquare"
+    app:roundLayout="@layout/digitalwatchsquare"
     tools:context=".WatchfaceDigitalActivity"
-    tools:deviceIds="wear"
-/>
+    tools:deviceIds="wear" />
+
 
 

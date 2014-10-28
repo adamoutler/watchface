@@ -1,4 +1,4 @@
-package com.bigandroidbbq;
+package com.casual_dev.watch.analog;
 
 import com.twotoasters.watchface.gears.GearsWatchfaceApp;
 

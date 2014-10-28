@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.bigandroidbbq">
+    package="com.casual_dev">
 
     <uses-feature android:name="android.hardware.type.watch" />
     <uses-permission android:name="com.google.android.permission.PROVIDE_BACKGROUND" />
 
     <application
-        android:name=".WatchfaceApp"
+        android:name=".watch.analog.WatchfaceApp"
         android:label="${appName}">
         <activity
-            android:name=".activity.WatchfaceActivity"
+            android:name=".watch.analog.WatchfaceActivity"
             android:allowEmbedded="true"
             android:label="${watchfaceName}"
             android:taskAffinity=""
@@ -25,7 +25,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.WatchfaceDigitalActivity"
+            android:name=".watch.digital.DigitalWatchfaceActivity"
             android:allowEmbedded="true"
             android:label="Digital"
             android:theme="@android:style/Theme.DeviceDefault" >

@@ -1,4 +1,4 @@
-package com.bigandroidbbq;
+package com.casual_dev.watch;
 
 import android.app.Activity;
 import android.app.Application;
