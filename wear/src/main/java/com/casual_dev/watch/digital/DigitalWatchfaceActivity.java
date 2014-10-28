@@ -69,11 +69,7 @@ public class DigitalWatchfaceActivity extends Activity implements WatchFaceLifec
         stub.setOnLayoutInflatedListener(new WatchViewStub.OnLayoutInflatedListener() {
             @Override
             public void onLayoutInflated(WatchViewStub stub) {
-
-                //Typeface myTypeface = Typeface.createFromAsset(getAssets(), "fonts/digital-7 (mono).ttf");
                 setWidgets();
-                mTime.resizeText();
-                //setFonts();
                 mTimeInfoReceiver.onReceive(DigitalWatchfaceActivity.this, registerReceiver(null, INTENT_FILTER_TIME));    //Time.
                 registerReceiver(mTimeInfoReceiver, INTENT_FILTER_TIME);
                 mDateInfoReceiver.onReceive(DigitalWatchfaceActivity.this, registerReceiver(null, INTENT_FILTER_DATE));    //Date.
@@ -85,17 +81,9 @@ public class DigitalWatchfaceActivity extends Activity implements WatchFaceLifec
 
     }
 
-    @Override
-    protected void onResume() {
 
-        super.onResume();
 
-    }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
 
     private void setFonts() {
         Typeface myTypeface = Typeface.createFromAsset(getAssets(), "fonts/digital-7 (mono).ttf");
@@ -137,6 +125,8 @@ public class DigitalWatchfaceActivity extends Activity implements WatchFaceLifec
     @Override
     public void onScreenAwake() {
         super.onResume();
+        mTime.setTextSize(99);
+        mTime.resizeText();
         mTextBack.setBackgroundColor(Color.LTGRAY);
         mDate.setTextColor(Color.BLACK);
         mBABBQText.setTextColor(Color.BLACK);
