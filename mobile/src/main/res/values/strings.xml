@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="dummytime">88:88</string>
+    <string name="dummydate">Wed Jun 25</string>
+    <string name="graybackgrounddescription">a gray background</string>
+    <string name="logo">logo</string>
+    <string name="app_name">CASUAL-Watch</string>
+    <string name="message">The CASUALWear face should already be installed. This view is here for easy removal.  Should you ever choose to do so, you can do it from the launcher</string>
+</resources>

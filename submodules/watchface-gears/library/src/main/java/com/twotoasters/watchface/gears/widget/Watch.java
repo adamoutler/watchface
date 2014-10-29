@@ -86,17 +86,7 @@ public class Watch {
         }
     };
     private AlarmManager alarmManager;
-    private WeakReference<IWatchface> watchfaceRef;    private final Runnable mTicker = new Runnable() {
-        public void run() {
-            onTimeChanged();
-
-            long now = SystemClock.uptimeMillis();
-            long next = now + (1000 - now % 1000);
-
-            if (hasWatchface())
-                getWatchface().getHandler().postAtTime(mTicker, next);
-        }
-    };
+    private WeakReference<IWatchface> watchfaceRef;
 
     public Watch(IWatchface watchface) {
         if (watchface == null) {
@@ -113,6 +103,18 @@ public class Watch {
     private static CharSequence abc(CharSequence a, CharSequence b, CharSequence c) {
         return a == null ? (b == null ? c : b) : a;
     }
+
+    private final Runnable mTicker = new Runnable() {
+        public void run() {
+            onTimeChanged();
+
+            long now = SystemClock.uptimeMillis();
+            long next = now + (1000 - now % 1000);
+
+            if (hasWatchface())
+                getWatchface().getHandler().postAtTime(mTicker, next);
+        }
+    };
 
     private void init(@NonNull IWatchface watchface) {
         if (mFormat12 == null || mFormat24 == null) {
