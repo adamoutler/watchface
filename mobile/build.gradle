@@ -5,11 +5,16 @@ android {
     buildToolsVersion "21.0.2"
 
     defaultConfig {
+        def versionMajor = Integer.parseInt(APP_VERSION_MAJOR)
+        def versionMinor = Integer.parseInt(APP_VERSION_MINOR)
+        def versionPatch = Integer.parseInt(APP_VERSION_PATCH)
+        def versionBuild = Integer.parseInt(APP_VERSION_BUILD)
         applicationId "com.casual_dev.CASUALWatch"
         minSdkVersion 16
         targetSdkVersion 21
-        versionCode 1
-        versionName "1.0"
+        versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild
+        versionName "${versionMajor}.${versionMinor}.${versionPatch}.${versionBuild}"
+
     }
 
     signingConfigs {
