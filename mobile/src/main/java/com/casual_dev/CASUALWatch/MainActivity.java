@@ -18,8 +18,6 @@ package com.casual_dev.CASUALWatch; /**
 import android.app.Activity;
 import android.os.Bundle;
 
-import com.casual_dev.R;
-
 public class MainActivity extends Activity {
 
     @Override

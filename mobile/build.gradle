@@ -5,7 +5,7 @@ android {
     buildToolsVersion "21.0.2"
 
     defaultConfig {
-        applicationId "com.casual_dev"
+        applicationId "com.casual_dev.CASUALWatch"
         minSdkVersion 16
         targetSdkVersion 21
         versionCode 1
