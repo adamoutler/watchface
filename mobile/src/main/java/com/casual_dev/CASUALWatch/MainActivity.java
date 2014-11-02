@@ -1,4 +1,4 @@
-package com.casual_dev.watch; /**
+package com.casual_dev.CASUALWatch; /**
  * Created by adamoutler on 10/27/14.
  */
 

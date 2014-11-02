@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.casual_dev.watch.widget.Watchface xmlns:android="http://schemas.android.com/apk/res/android"
+<com.casual_dev.CASUALWatch.analog.AnalogWatchfaceActions xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/watchface"
     android:layout_width="match_parent"
@@ -31,4 +31,4 @@
         style="@style/GearsWatchLayer.Hand"
         android:src="@drawable/hand_second_normal" />
 
-</com.casual_dev.watch.widget.Watchface>
+</com.casual_dev.CASUALWatch.analog.AnalogWatchfaceActions>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.casual_dev">
+    package="com.casual_dev.CASUALWatch">
 
     <uses-feature android:name="android.hardware.type.watch" />
     <uses-permission android:name="com.google.android.permission.PROVIDE_BACKGROUND" />
@@ -9,17 +9,17 @@
         android:minSdkVersion="20"
         android:targetSdkVersion="21" />
     <application
-        android:name=".watch.analog.WatchfaceApp"
+        android:name=".analog.AnalogWatchfaceApp"
         android:label="${appName}">
         <activity
-            android:name=".watch.analog.WatchfaceActivity"
+            android:name=".analog.AnalogWatchfaceActivity"
             android:allowEmbedded="true"
             android:label="CASUALWear Analog"
             android:taskAffinity="">
 
-        <meta-data
+            <meta-data
                 android:name="com.google.android.clockwork.home.preview"
-                android:resource="@drawable/preview" />
+                android:resource="@drawable/analogpreview" />
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,11 +27,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".watch.digital.DigitalWatchfaceActivity"
+            android:name=".digital.DigitalWatchfaceApp"
             android:allowEmbedded="true"
             android:label="CASUALWear Digital">
 
-        <meta-data
+            <meta-data
                 android:name="com.google.android.clockwork.home.preview"
                 android:resource="@drawable/digitalpreview" />
 

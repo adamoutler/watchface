@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<RelativeLayout
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:id="@+id/roundwatchrelative"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_column="2"
+    android:layout_marginTop="0dp"
+    android:layout_row="0"
+    android:background="@color/black">
+
+
+    <!--background logo -->
+
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_margin="0dp"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <!-- Left-side margin -->
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight=".25" />
+
+        <!-- Content aligned left-/right-->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_margin="0dp"
+            android:layout_weight=".55"
+
+            android:orientation="vertical">
+            <!-- Top Margin -->
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight=".20" />
+
+            <!-- Time -->
+            <com.casual_dev.CASUALWatch.widget.MyTextView
+                android:id="@+id/timedimmed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_margin="0dp"
+                android:layout_weight=".01"
+                android:fontFamily="sans-serif-thin"
+                android:gravity="center"
+                android:maxLines="1"
+
+                android:padding="0dp"
+                android:text="@string/dummytime"
+                android:textColor="@color/white"
+                android:textSize="45sp"
+                android:textStyle="normal" />
+
+
+            <!-- Bottom margin -->
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+
+        <!-- Right-side margin -->
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight=".1"
+
+            />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/datedimmed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="11dp"
+        android:fontFamily="sans-serif-light"
+        android:text="@string/dummydate"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@color/white" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_gravity="center|bottom"
+        android:layout_margin="0dp"
+        android:layout_weight=".01"
+        android:divider="#000000"
+        android:dividerPadding="0dp"
+        android:gravity="left"
+        android:maxLines="1"
+        android:orientation="vertical"
+        android:padding="0dp"
+        android:showDividers="middle"
+        android:weightSum="1">
+
+
+        <TextView
+            android:id="@+id/LogoText"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|bottom"
+            android:layout_margin="0dp"
+            android:maxLines="1"
+            android:padding="0dp"
+            android:text="CASUAL"
+            android:textAlignment="center"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#3898ca"
+            android:textSize="20dp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_gravity="center|top"
+            android:layout_margin="0dp"
+            android:layout_weight=".01"
+            android:maxLines="1"
+            android:orientation="horizontal"
+            android:padding="0dp"
+            android:textSize="150dp"
+
+            android:weightSum="1">
+
+            <TextView
+                android:id="@+id/dev"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="0dp"
+                android:fontFamily="sans-serif-light"
+                android:maxLines="1"
+                android:paddingLeft="10dp"
+                android:text="DEV"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/grey"
+                android:textStyle="bold" />
+
+
+            <TextView
+                android:id="@+id/randomnessdim"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="0dp"
+                android:fontFamily="sans-serif-light"
+                android:maxLines="1"
+                android:padding="0dp"
+                android:text="ELOPMENT"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="#3898ca"
+                android:textStyle="bold"
+                android:visibility="invisible" />
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>
+
+
+
