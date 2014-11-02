@@ -4,6 +4,7 @@
 
     xmlns:android="http://schemas.android.com/apk/res/android"
 
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/roundwatchrelative"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
@@ -20,7 +21,7 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_alignParentTop="true"
-        android:layout_gravity="left|top"
+        android:layout_gravity="start|top"
         android:contentDescription="@string/logo"
         android:src="@drawable/digital_background" />
 
@@ -53,17 +54,17 @@
             <Space
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_weight=".20" />
+                android:layout_weight=".20"
+                tools:ignore="NestedWeights" />
 
             <!-- Time -->
             <com.casual_dev.CASUALWatch.widget.MyTextView
                 android:id="@+id/timeawake"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_gravity="right"
+                android:layout_gravity="end"
                 android:layout_margin="0dp"
-                android:layout_marginLeft="20dp"
+                android:layout_marginStart="20dp"
                 android:layout_weight=".01"
                 android:fontFamily="sans-serif-thin"
                 android:gravity="center"
@@ -103,7 +104,8 @@
         android:fontFamily="sans-serif-light"
         android:text="@string/dummydate"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="@color/white" />
+        android:textColor="@color/white"
+        tools:ignore="RelativeOverlap" />
 
 
     <LinearLayout
@@ -114,10 +116,9 @@
         android:layout_centerVertical="true"
         android:layout_gravity="center|bottom"
         android:layout_margin="0dp"
-        android:layout_weight=".01"
         android:divider="#000000"
         android:dividerPadding="0dp"
-        android:gravity="left"
+        android:gravity="end"
         android:maxLines="1"
         android:orientation="vertical"
         android:padding="0dp"
@@ -134,11 +135,11 @@
             android:layout_margin="0dp"
             android:maxLines="1"
             android:padding="0dp"
-            android:text="CASUAL"
+            android:text="@string/casual"
             android:textAlignment="center"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="#3898ca"
-            android:textSize="20dp" />
+            android:textSize="20sp" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -149,8 +150,6 @@
             android:maxLines="1"
             android:orientation="horizontal"
             android:padding="0dp"
-            android:textSize="150dp"
-
             android:weightSum="1">
 
             <TextView
@@ -160,11 +159,12 @@
                 android:layout_margin="0dp"
                 android:fontFamily="sans-serif-light"
                 android:maxLines="1"
-                android:paddingLeft="10dp"
-                android:text="DEV"
+                android:paddingLeft="10sp"
+                android:text="@string/dev"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@color/grey"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                tools:ignore="RtlHardcoded,RtlSymmetry" />
 
 
             <TextView
@@ -176,7 +176,7 @@
                 android:maxLines="1"
 
                 android:padding="0dp"
-                android:text="ELOPMENT"
+                android:text="@string/evelopment"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="#3898ca"
                 android:textStyle="bold" />
