@@ -1,30 +1,15 @@
-watchface-template
+CASUALWear
 ==================
+synchronize this repository and open in Android Studio.
 
-Requires Python 2.7.x.
+The Java code in this application is 100% open source and free.  The artwork and layouts are unlicensed.  You should entirely replace the artwork and layouts if you plan to use this source code for your own projects.
 
-Usage:
+####The project consists of three parts.
+**/wear/src/main/java/com.casual_dev.CASUALWatch/digital**
+The wear/digital portion of this app provides methods and classes pertaining to digital watches with flexible layouts.  Two layouts are used, one for dim and one for awake.  There are three classes, DigitalWatchfaceActivity defines/declares layout/view items and handles time changes. DigitalWatchfaceActions handles transitions and special handlign for view items.  DigitalWatchfaceApp is used to launch the activity while inheriting the properties from the activity and actions.
 
-- Clone the repo and give it a new name (denoted here by *&lt;new-watchface-name&gt;*)
+**/wear/src/main/java/com.casual_dev.CASUALWatch/analog**
+The wear/analog portion fo this app provides methods and classes pertaining to analog watches and allows replacement of background and hands using PNG resource changes.  The images are changed smoothly by use of fading betwen awake and dim modes. The layout structure is similar to digital.
 
-	```
-	git clone git@github.com:twotoasters/watchface-template.git <new-watchface-name>
-	```
-
-- Navigate into the newly created folder with your repo and run the project generation script with the desired input parameter values
-
-	```
-	cd <new-watchface-name>
-	./generate-project.py -w <watchfaceName> -a <appName> -p <packageName>
-	```
-
-- Remove the Git history and re-add the dependent *watchface-gears* submodule
-
-	```
-	rm -rf .git
-	rm -rf submodules/watchface-gears
-	git init
-	git submodule add git@github.com:twotoasters/watchface-gears.git submodules/watchface-gears
-	```
-
-- Start implementing your watchface in the `wear` module's `Watchface` class
+**/mobile/src/main/java/com.casual_dev.CASUALWatch**
+This is a single view application which provides an easy way to remove the app. Remove the launcher intent from the mobile/src/main/AndroidManifest.xml to disable this single-view app if it's determined to be unnecessary for your project
