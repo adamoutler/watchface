@@ -5,16 +5,14 @@
     <uses-feature android:name="android.hardware.type.watch" />
     <uses-permission android:name="com.google.android.permission.PROVIDE_BACKGROUND" />
     <uses-sdk
-        android:maxSdkVersion="21"
         android:minSdkVersion="20"
-        android:targetSdkVersion="21"
+        android:targetSdkVersion="20"
         android:versionCode="2"
         android:versionName="1.1" />
     <application
-        android:name=".analog.AnalogWatchfaceApp"
         android:label="${appName}">
         <activity
-            android:name=".analog.AnalogWatchfaceActivity"
+            android:name="com.casual_dev.CASUALWatch.analog.AnalogWatchfaceActivity"
             android:allowEmbedded="true"
             android:label="CASUALWear Analog"
             android:taskAffinity="">
@@ -29,7 +27,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".digital.DigitalWatchfaceApp"
+            android:name="com.casual_dev.CASUALWatch.digital.DigitalWatchfaceApp"
             android:allowEmbedded="true"
             android:label="CASUALWear Digital">
 

@@ -8,10 +8,30 @@ apply plugin: 'com.android.application'
 apply plugin: 'hugo'
 
 android {
-    compileSdkVersion Integer.parseInt(project.ANDROID_BUILD_SDK_VERSION)
-    buildToolsVersion project.ANDROID_BUILD_TOOLS_VERSION
+    compileSdkVersion Integer.parseInt(ANDROID_COMPILE_SDK_VERSION)
+    buildToolsVersion ANDROID_BUILD_TOOLS_VERSION
+    android.applicationVariants.all { variant ->
+        def task = variant.generateBuildConfig
+        task.dependsOn(propagateApplicationIdSuffix)
+    }
+    task propagateApplicationIdSuffix << {
+        project.android.buildTypes.all { type ->
+            if (rootProject.hasProperty('currentApplicationIdSuffix')) {
+                type.applicationIdSuffix = rootProject.ext.currentApplicationIdSuffix
+            }
+        }
+    }
 
+    applicationVariants.all { variant ->
+        def watchfaceName = project.WATCHFACE_NAME.replace(" ", "").toLowerCase()
+        def file = variant.outputFile
+        def suffix = defaultConfig.versionName
+        def outputFile = file.name.replace(".apk", "-" + suffix + ".apk")
+        outputFile = outputFile.replace("CASUALWatch", watchfaceName)
+        variant.outputFile = new File(file.parent, outputFile)
+    }
     defaultConfig {
+
         applicationId project.PACKAGE_NAME
         def versionMajor = Integer.parseInt(APP_VERSION_MAJOR)
         def versionMinor = Integer.parseInt(APP_VERSION_MINOR)
@@ -23,14 +43,7 @@ android {
         versionName "${versionMajor}.${versionMinor}.${versionPatch}.${versionBuild}"
         manifestPlaceholders = [watchfaceName: project.WATCHFACE_NAME, appName: project.APP_NAME]
 
-        applicationVariants.all { variant ->
-            def watchfaceName = project.WATCHFACE_NAME.replace(" ", "").toLowerCase()
-            def file = variant.outputFile
-            def suffix = defaultConfig.versionName
-            def outputFile = file.name.replace(".apk", "-" + suffix + ".apk")
-            outputFile = outputFile.replace("wear", watchfaceName)
-            variant.outputFile = new File(file.parent, outputFile)
-        }
+
     }
 
     compileOptions {
