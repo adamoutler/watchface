@@ -8,4 +8,9 @@
     <string name="casual">CASUAL</string>
     <string name="evelopment">ELOPMENT</string>
     <string name="dev">DEV</string>
+
+    <string name="custom_dream_label">hasCode Dream</string>
+    <string name="demo_text">Dreaming of hasCode.com..</string>
+    <string name="toggle_animation">Animate Dream</string>
+
 </resources>
