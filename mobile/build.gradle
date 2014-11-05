@@ -1,0 +1,64 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion Integer.parseInt(ANDROID_BUILD_MIN_SDK_VERSION)
+    buildToolsVersion ANDROID_BUILD_TOOLS_VERSION
+    android.applicationVariants.all { variant ->
+        def task = variant.generateBuildConfig
+        task.dependsOn(propagateApplicationIdSuffix)
+    }
+    task propagateApplicationIdSuffix << {
+        project.android.buildTypes.all { type ->
+            if (rootProject.hasProperty('currentApplicationIdSuffix')) {
+                type.applicationIdSuffix = rootProject.ext.currentApplicationIdSuffix
+            }
+        }
+    }
+
+    applicationVariants.all { variant ->
+        def watchfaceName = project.WATCHFACE_NAME.replace(" ", "").toLowerCase()
+        def file = variant.outputFile
+        def suffix = defaultConfig.versionName
+        def outputFile = file.name.replace(".apk", "-" + suffix + ".apk")
+        outputFile = outputFile.replace("mobile", watchfaceName)
+        variant.outputFile = new File(file.parent, outputFile)
+    }
+    defaultConfig {
+        def versionMajor = Integer.parseInt(APP_VERSION_MAJOR)
+        def versionMinor = Integer.parseInt(APP_VERSION_MINOR)
+        def versionPatch = Integer.parseInt(APP_VERSION_PATCH)
+        def versionBuild = Integer.parseInt(APP_VERSION_BUILD)
+
+        versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild
+        versionName "${versionMajor}.${versionMinor}.${versionPatch}.${versionBuild}"
+
+    }
+
+    signingConfigs {
+        release {
+            storeFile file("/home/adamoutler/codesigning/adamoutlerIsUsernameAndPass.jks")
+
+            keyAlias 'adamoutler'
+            storePassword 'adamoutler'
+            keyPassword 'adamoutler'
+        }
+    }
+
+    buildTypes {
+        release {
+            runProguard false
+            signingConfig signingConfigs.release
+        }
+        debug {
+            jniDebugBuild true
+        }
+    }
+
+}
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.google.android.gms:play-services:+'
+    compile 'com.google.android.gms:play-services:5.0.+@aar'
+    wearApp project(':wear')
+}
+

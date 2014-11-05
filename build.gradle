@@ -1,0 +1,24 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:0.12.+'
+    }
+}
+
+subprojects {
+    buildscript {
+        repositories {
+            mavenCentral()
+        }
+    }
+    repositories {
+        mavenCentral()
+    }
+}
+allprojects {
+    repositories {
+        jcenter()
+    }
+}
