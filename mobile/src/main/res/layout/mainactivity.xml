@@ -19,12 +19,24 @@
         android:id="@+id/userMessage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="CASUALWear" />
+        android:hint="Top Text"
+        android:inputType="text" />
+
+    <EditText
+        android:id="@+id/userMessage2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Bottom Text"
+        android:inputType="text" />
 
     <Button
         android:id="@+id/sendtext"
         style="?android:attr/buttonStyleSmall"
+
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="send" />
+        android:layout_gravity="right"
+        android:labelFor="@+id/userMessage"
+        android:text="@string/sendButtonText" />
+
 </LinearLayout>

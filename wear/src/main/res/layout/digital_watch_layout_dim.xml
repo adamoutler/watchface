@@ -105,7 +105,6 @@
         android:layout_centerVertical="true"
         android:layout_gravity="center|bottom"
         android:layout_margin="0dp"
-        android:layout_weight=".01"
         android:divider="#000000"
         android:dividerPadding="0dp"
         android:gravity="left"
@@ -125,11 +124,11 @@
             android:layout_margin="0dp"
             android:maxLines="1"
             android:padding="0dp"
-            android:text="CASUAL"
+            android:text="@string/casual"
             android:textAlignment="center"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="#3898ca"
-            android:textSize="20dp" />
+            android:textSize="20sp" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -140,7 +139,7 @@
             android:maxLines="1"
             android:orientation="horizontal"
             android:padding="0dp"
-            android:textSize="150dp"
+            android:textSize="150sp"
 
             android:weightSum="1">
 
@@ -151,8 +150,9 @@
                 android:layout_margin="0dp"
                 android:fontFamily="sans-serif-light"
                 android:maxLines="1"
-                android:paddingLeft="10dp"
-                android:text="DEV"
+                android:paddingStart="10dp"
+
+                android:text="@string/dev"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@color/grey"
                 android:textStyle="bold" />
@@ -166,7 +166,7 @@
                 android:fontFamily="sans-serif-light"
                 android:maxLines="1"
                 android:padding="0dp"
-                android:text="ELOPMENT"
+                android:text="@string/evelopment"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="#3898ca"
                 android:textStyle="bold"

@@ -6,4 +6,6 @@
     <string name="logo">logo</string>
     <string name="app_name">CASUALWear</string>
     <string name="message">The CASUALWear face should already be installed. This view is here for easy removal.  Should you ever choose to do so, you can do it from the launcher</string>
+    <string name="CASUALWear">CASUALWear</string>
+    <string name="sendButtonText">send</string>
 </resources>

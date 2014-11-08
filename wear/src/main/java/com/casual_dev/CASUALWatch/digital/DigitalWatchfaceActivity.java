@@ -91,7 +91,7 @@ public class DigitalWatchfaceActivity extends Activity implements WatchFaceLifec
             String date = new SimpleDateFormat(TIME_FORMAT_DISPLAYED).format(Calendar.getInstance().getTime());
             mTimeAwake.setText(date);
             mTimeDim.setText(date);
-
+            Log.d("Tick", "tock");
         }
     };
 
@@ -189,7 +189,7 @@ public class DigitalWatchfaceActivity extends Activity implements WatchFaceLifec
 
     @Override
     public void onWatchFaceRemoved() {
-        unregisterReceivers();
+        //unregisterReceivers();
     }
 
     @Override
@@ -198,14 +198,21 @@ public class DigitalWatchfaceActivity extends Activity implements WatchFaceLifec
 
     }
 
-    public void setPrimarySecondaryText(String[] words) {
-        String replace = words[0].equals("") ? "CASUAL" : words[0];
-        mCasual.setText(replace);
-        mCasualDim.setText(replace);
-        replace = words.length > 1 ? words[1] : "DEV";
-        mDev.setText(replace);
-        mDevDim.setText(replace);
-        if (replace.equals("DEV")) {
+    public void setPrimaryText(String s) {
+        if (s.isEmpty()) {
+            s = "CASUAL";
+        }
+        mCasual.setText(s);
+        mCasualDim.setText(s);
+    }
+
+    public void setSecondaryText(String s) {
+        if (s.isEmpty()) {
+            s = "DEV";
+        }
+        mDev.setText(s);
+        mDevDim.setText(s);
+        if (s.toLowerCase().equals("DEV".toLowerCase())) {
             randomness.setVisibility(View.VISIBLE);
             randomnessDim.setVisibility(View.INVISIBLE);
         } else {
@@ -215,9 +222,11 @@ public class DigitalWatchfaceActivity extends Activity implements WatchFaceLifec
         }
     }
 
+
     private void batteryLevelChanged(int level) {
         //   battery.setText(level+"%");
     }
+
 }
 
 

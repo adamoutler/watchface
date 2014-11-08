@@ -1,0 +1,28 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion Integer.parseInt(ANDROID_BUILD_MIN_SDK_VERSION)
+    buildToolsVersion ANDROID_BUILD_TOOLS_VERSION
+
+    defaultConfig {
+        applicationId "com.casual_dev.libshareddatacasualwatch"
+        def versionMajor = Integer.parseInt(APP_VERSION_MAJOR)
+        def versionMinor = Integer.parseInt(APP_VERSION_MINOR)
+        def versionPatch = Integer.parseInt(APP_VERSION_PATCH)
+        def versionBuild = Integer.parseInt(APP_VERSION_BUILD)
+        minSdkVersion Integer.parseInt(ANDROID_BUILD_MIN_SDK_VERSION_WEAR)
+        targetSdkVersion Integer.parseInt(ANDROID_BUILD_TARGET_SDK_VERSION)
+        versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild
+        versionName "${versionMajor}.${versionMinor}.${versionPatch}.${versionBuild}"
+    }
+    buildTypes {
+        release {
+            runProguard false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+}

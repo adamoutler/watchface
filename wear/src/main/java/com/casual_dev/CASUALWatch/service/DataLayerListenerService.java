@@ -4,6 +4,7 @@ import android.net.Uri;
 import android.util.Log;
 
 import com.casual_dev.CASUALWatch.digital.DigitalWatchfaceActivity;
+import com.casual_dev.libshareddatacasualwatch.CustomizeWatchMessagingObject;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.data.FreezableUtils;
@@ -59,12 +60,14 @@ public class DataLayerListenerService extends WearableListenerService {
 
             Log.d("DataItem", "payload:" + new String(payload));
             if (event.getType() == DataEvent.TYPE_CHANGED &&
-                    event.getDataItem().getUri().getPath().equals("/CDEVMessage")) {
-                DataMapItem dataMapItem = DataMapItem.fromDataItem(event.getDataItem());
-                String words = dataMapItem.getDataMap().getString("CDEVMessage");
-                Log.d("String Received:", words);
+                    event.getDataItem().getUri().getPath().equals(CustomizeWatchMessagingObject.MESSAGEDATAPATH)) {
+                CustomizeWatchMessagingObject delivery = new CustomizeWatchMessagingObject();
+                decodeDataRequest(DataMapItem.fromDataItem(event.getDataItem()), delivery);
+
+
+                Log.d("String Received:", delivery.getTopText().getValue());
                 if (DigitalWatchfaceActivity.getInstance() != null) {
-                    updateDigitalWatchFaceText(words);
+                    updateDigitalWatchFaceText(delivery);
                 }
             }
 
@@ -74,7 +77,7 @@ public class DataLayerListenerService extends WearableListenerService {
         }
     }
 
-    private void updateDigitalWatchFaceText(final String words) {
+    private void updateDigitalWatchFaceText(final CustomizeWatchMessagingObject delivery) {
         DigitalWatchfaceActivity.
                 getInstance().
                 runOnUiThread(
@@ -82,11 +85,22 @@ public class DataLayerListenerService extends WearableListenerService {
 
                             @Override
                             public void run() {
-                                DigitalWatchfaceActivity.getInstance().setPrimarySecondaryText(words.split(" "));
-
+                                DigitalWatchfaceActivity d = DigitalWatchfaceActivity.getInstance();
+                                d.setPrimaryText(delivery.getTopText().getValue());
+                                d.setPrimaryText(delivery.getBottomText().getValue());
                             }
                         }
 
                 );
+    }
+
+    public CustomizeWatchMessagingObject decodeDataRequest(DataMapItem delivery, CustomizeWatchMessagingObject mo) {
+        if (null != delivery.getDataMap().getString(CustomizeWatchMessagingObject.BOTTOMTEXTTAG))
+            mo.setBottomText(delivery.getDataMap().getString(CustomizeWatchMessagingObject.BOTTOMTEXTTAG));
+        if (null != delivery.getDataMap().getString(CustomizeWatchMessagingObject.BACKGROUNDIMAGE))
+            mo.setTopText(delivery.getDataMap().getString(CustomizeWatchMessagingObject.TOPTEXTTAG));
+        //if (null!=delivery.getDataMap().getAsset(TOPTEXTTAG).getUri())setBackgroundImage(delivery.getDataMap().getAsset(BACKGROUNDIMAGE).getUri());
+
+        return mo;
     }
 }
