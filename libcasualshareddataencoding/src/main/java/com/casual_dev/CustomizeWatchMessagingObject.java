@@ -1,9 +1,12 @@
-package com.casual_dev.libshareddatacasualwatch;
+package com.casual_dev;
 
 
-import android.net.Uri;
+import com.sun.jndi.toolkit.url.Uri;
 
-import org.apache.http.NameValuePair;
+import java.util.AbstractMap;
+import java.util.Hashtable;
+
+;
 
 
 /**
@@ -11,57 +14,45 @@ import org.apache.http.NameValuePair;
  * Created by adamoutler on 11/4/14.
  */
 public class CustomizeWatchMessagingObject {
-    final public static String MESSAGEDATAPATH = "/CDEVMessage";
-    final public static String TOPTEXTTAG = "TOPTEXT";
-    final public static String BOTTOMTEXTTAG = "BOTTOMTEXT";
-    final public static String BACKGROUNDIMAGE = "BACKGROUNDIMAGE";
+
     private String topText = "";
     private String bottomText = "";
     private Uri backgroundImage = null;
+    Hashtable table = new Hashtable();
+
+    public enum TAG{
+        TOPTEXTTAG,
+        BOTTOMTEXTTAG,
+        BACKGROUNDIMAGE,
+    }
 
     public CustomizeWatchMessagingObject() {
-
     }
 
 
-    public NameValuePair getTopText() {
-        return new NameValuePair() {
-            @Override
-            public String getName() {
-                return TOPTEXTTAG;
-            }
+    public static String getMessageDataPath(){
+        return "/CDEVMessage";
+    }
 
-            @Override
-            public String getValue() {
-                return topText;
-            }
-        };
+    public AbstractMap.SimpleEntry<String,String> getTopText() {
+        return new AbstractMap.SimpleEntry<String, String>(TAG.TOPTEXTTAG.name(), topText);
     }
 
     public void setTopText(String topText) {
         this.topText = topText;
     }
 
-    public NameValuePair getBottomText() {
-        return new NameValuePair() {
-            @Override
-            public String getName() {
-                return BOTTOMTEXTTAG;
-            }
+    public AbstractMap.SimpleEntry<String,String> getBottomText() {
+        return new AbstractMap.SimpleEntry<String, String>(TAG.BOTTOMTEXTTAG.name(),bottomText);
 
-            @Override
-            public String getValue() {
-                return bottomText;
-            }
-        };
     }
 
     public void setBottomText(String bottomText) {
         this.bottomText = bottomText;
     }
 
-    public Uri getBackgroundImage() {
-        return backgroundImage;
+    public AbstractMap.SimpleEntry<String,Uri>  getBackgroundImage() {
+        return new AbstractMap.SimpleEntry<String, Uri>(TAG.BACKGROUNDIMAGE.name(), backgroundImage);
     }
 
     public void setBackgroundImage(Uri backgroundImage) {

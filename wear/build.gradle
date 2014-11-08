@@ -70,8 +70,8 @@ android {
 }
 
 dependencies {
-    compile project(':libshareddatacasualwatch')
     compile project(':submodules:watchface-gears:library')
+    compile project(':libcasualshareddataencoding')
     compile 'com.jakewharton:butterknife:5.1.+'
     compile 'com.jakewharton.timber:timber:2.4.+'
 }

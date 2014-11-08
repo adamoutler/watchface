@@ -1,1 +1,1 @@
-include ':submodules:watchface-gears:library', ':wear', ':mobile', ':libshareddatacasualwatch'
+include ':submodules:watchface-gears:library', ':libcasualshareddataencoding', ':wear', ':mobile'

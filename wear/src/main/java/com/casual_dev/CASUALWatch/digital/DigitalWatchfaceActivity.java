@@ -168,7 +168,7 @@ public class DigitalWatchfaceActivity extends Activity implements WatchFaceLifec
         receiversSet = false;
         unregisterReceiver(mTimeInfoReceiver);
         unregisterReceiver(mDateInfoReceiver);
-        unregisterReceiver(mBattInfoReceiver);
+        //unregisterReceiver(mBattInfoReceiver);
     }
 
     @Override

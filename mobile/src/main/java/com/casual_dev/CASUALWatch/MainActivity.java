@@ -16,13 +16,13 @@ package com.casual_dev.CASUALWatch; /**
 
 
 import android.app.Activity;
-import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.casual_dev.libshareddatacasualwatch.CustomizeWatchMessagingObject;
+import com.casual_dev.CustomizeWatchMessagingObject;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.wearable.DataApi;
@@ -36,7 +36,7 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
     Button sendText;
     EditText topText;
     EditText bottomText;
-    Uri backgroundURI;
+    //Uri backgroundURI;
 
     GoogleApiClient mApiClient;
 
@@ -76,8 +76,11 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
             public void onClick(View view) {
                 CustomizeWatchMessagingObject mo = new CustomizeWatchMessagingObject();
                 mo.setTopText(topText.getText().toString());
+                Log.d("Text",topText.getText().toString());
+                Log.d("Text",bottomText.getText().toString());
+
                 mo.setBottomText(bottomText.getText().toString());
-                mo.setBackgroundImage(backgroundURI);
+                //mo.setBackgroundImage(backgroundURI.getText());
 
                 PendingResult<DataApi.DataItemResult> pendingResult = Wearable.DataApi.putDataItem(mApiClient, encodeDataRequest(mo));
 
@@ -86,10 +89,11 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
     }
 
     public PutDataRequest encodeDataRequest(CustomizeWatchMessagingObject mo) {
-        PutDataMapRequest dataMap = PutDataMapRequest.create(CustomizeWatchMessagingObject.MESSAGEDATAPATH);
-        dataMap.getDataMap().putString(mo.getBottomText().getName(), mo.getBottomText().getValue());
-        dataMap.getDataMap().putString(mo.getTopText().getName(), mo.getTopText().getValue());
-        dataMap.getDataMap().putString(mo.getBottomText().getName(), mo.getBottomText().getValue());
+        PutDataMapRequest dataMap = PutDataMapRequest.create(CustomizeWatchMessagingObject.getMessageDataPath());
+        dataMap.getDataMap().putString(mo.getBottomText().getKey(), mo.getBottomText().getValue());
+        dataMap.getDataMap().putString(mo.getTopText().getKey(), mo.getTopText().getValue());
+        dataMap.getDataMap().putString(mo.getBottomText().getKey(), mo.getBottomText().getValue());
+        Log.d("CASUALWear","Top:"+ dataMap.getDataMap().get(mo.getTopText().getKey())+", Bottom:"+dataMap.getDataMap().get(mo.getBottomText().getKey()));
         return dataMap.asPutDataRequest();
     }
 
