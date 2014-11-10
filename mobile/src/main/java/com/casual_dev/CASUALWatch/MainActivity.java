@@ -22,7 +22,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.casual_dev.CustomizeWatchMessagingObject;
+import com.casual_dev.WatchMessaging;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.wearable.DataApi;
@@ -30,9 +30,14 @@ import com.google.android.gms.wearable.PutDataMapRequest;
 import com.google.android.gms.wearable.PutDataRequest;
 import com.google.android.gms.wearable.Wearable;
 
+import java.io.IOException;
+
+import static com.casual_dev.WatchMessaging.ITEMS.BOTTOMTEXTTAG;
+
 
 public class MainActivity extends Activity implements GoogleApiClient.ConnectionCallbacks {
-
+    private static final String TAG = "CASUALMainActivity";
+    WatchMessaging mo;
     Button sendText;
     EditText topText;
     EditText bottomText;
@@ -44,7 +49,10 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mainactivity);
+        mo = new WatchMessaging(getFilesDir().getAbsolutePath());
+
         setWidgets();
+
     }
 
     @Override
@@ -69,31 +77,44 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
 
     private void setWidgets() {
         sendText = (Button) findViewById(R.id.sendtext);
-        topText = (EditText) findViewById(R.id.userMessage);
         bottomText = (EditText) findViewById(R.id.userMessage2);
+        topText = (EditText) findViewById(R.id.userMessage);
+
+        topText.setText(mo.getObject(WatchMessaging.ITEMS.TOPTEXTTAG,String.class) + " ");
+        bottomText.setText(mo.getObject(BOTTOMTEXTTAG,String.class)+" ");
+
+        for (Object o:mo.getTable().keySet()){
+
+            Log.d(TAG, o.toString()+" "+ mo.getTable().get(o).toString()+ mo.getObject(WatchMessaging.ITEMS.TOPTEXTTAG,String.class));
+
+        }
+
+
+        Log.d(TAG, "text:" + mo.getObject(WatchMessaging.ITEMS.TOPTEXTTAG,String.class));
         sendText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CustomizeWatchMessagingObject mo = new CustomizeWatchMessagingObject();
-                mo.setTopText(topText.getText().toString());
-                Log.d("Text",topText.getText().toString());
-                Log.d("Text",bottomText.getText().toString());
+                Log.d(TAG , topText.getText().toString());
+                Log.d(TAG , bottomText.getText().toString());
 
-                mo.setBottomText(bottomText.getText().toString());
-                //mo.setBackgroundImage(backgroundURI.getText());
+                mo.putObject(BOTTOMTEXTTAG, bottomText.getText().toString());
+                mo.putObject(WatchMessaging.ITEMS.TOPTEXTTAG,topText.getText().toString());
 
                 PendingResult<DataApi.DataItemResult> pendingResult = Wearable.DataApi.putDataItem(mApiClient, encodeDataRequest(mo));
+                try {
+                    mo.store();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
             }
         });
     }
 
-    public PutDataRequest encodeDataRequest(CustomizeWatchMessagingObject mo) {
-        PutDataMapRequest dataMap = PutDataMapRequest.create(CustomizeWatchMessagingObject.getMessageDataPath());
-        dataMap.getDataMap().putString(mo.getBottomText().getKey(), mo.getBottomText().getValue());
-        dataMap.getDataMap().putString(mo.getTopText().getKey(), mo.getTopText().getValue());
-        dataMap.getDataMap().putString(mo.getBottomText().getKey(), mo.getBottomText().getValue());
-        Log.d("CASUALWear","Top:"+ dataMap.getDataMap().get(mo.getTopText().getKey())+", Bottom:"+dataMap.getDataMap().get(mo.getBottomText().getKey()));
+    public PutDataRequest encodeDataRequest(WatchMessaging mo) {
+        PutDataMapRequest dataMap = PutDataMapRequest.create(WatchMessaging.getMessageDataPath());
+        dataMap.getDataMap().putString(WatchMessaging.TABLENAME,mo.getTableJSON());
+        Log.d(TAG ,"Table"+dataMap.getDataMap().get(WatchMessaging.TABLENAME));
         return dataMap.asPutDataRequest();
     }
 
@@ -102,4 +123,13 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
 
     }
 
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        try {
+            mo.store();
+        } catch (IOException e) {
+        }
+    }
 }

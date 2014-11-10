@@ -51,6 +51,7 @@ android {
         }
         debug {
             jniDebugBuild true
+            renderscriptDebugBuild true
         }
     }
 

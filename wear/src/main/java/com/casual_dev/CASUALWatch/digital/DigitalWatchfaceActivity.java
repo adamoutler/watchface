@@ -91,7 +91,6 @@ public class DigitalWatchfaceActivity extends Activity implements WatchFaceLifec
             String date = new SimpleDateFormat(TIME_FORMAT_DISPLAYED).format(Calendar.getInstance().getTime());
             mTimeAwake.setText(date);
             mTimeDim.setText(date);
-            Log.d("Tick", "tock");
         }
     };
 

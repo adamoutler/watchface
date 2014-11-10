@@ -4,7 +4,7 @@ import android.net.Uri;
 import android.util.Log;
 
 import com.casual_dev.CASUALWatch.digital.DigitalWatchfaceActivity;
-import com.casual_dev.CustomizeWatchMessagingObject;
+import com.casual_dev.WatchMessaging;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.data.FreezableUtils;
@@ -14,6 +14,7 @@ import com.google.android.gms.wearable.DataMapItem;
 import com.google.android.gms.wearable.Wearable;
 import com.google.android.gms.wearable.WearableListenerService;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -22,7 +23,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class DataLayerListenerService extends WearableListenerService {
 
-    private static final String TAG = "DataLayerSample";
+    private static final String TAG = "CASUALDataLayerSample";
     private static final String START_ACTIVITY_PATH = "CDEVMessage";
     private static final String DATA_ITEM_RECEIVED_PATH = "/CDEVMessage";
 
@@ -60,12 +61,17 @@ public class DataLayerListenerService extends WearableListenerService {
 
             Log.d("DataItem", "payload:" + new String(payload));
             if (event.getType() == DataEvent.TYPE_CHANGED &&
-                    event.getDataItem().getUri().getPath().equals(CustomizeWatchMessagingObject.getMessageDataPath())) {
-                CustomizeWatchMessagingObject delivery = new CustomizeWatchMessagingObject();
+                    event.getDataItem().getUri().getPath().equals(WatchMessaging.getMessageDataPath())) {
+                WatchMessaging delivery = new WatchMessaging(getFilesDir().getAbsolutePath());
                 decodeDataRequest(DataMapItem.fromDataItem(event.getDataItem()), delivery);
+                try {
+                    delivery.store();
 
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
-                Log.d("String Received:", delivery.getTopText().getValue());
+                Log.d(TAG, "top text "+delivery.getObject(WatchMessaging.ITEMS.TOPTEXTTAG, String.class));
                 if (DigitalWatchfaceActivity.getInstance() != null) {
                     updateDigitalWatchFaceText(delivery);
                 }
@@ -77,7 +83,7 @@ public class DataLayerListenerService extends WearableListenerService {
         }
     }
 
-    private void updateDigitalWatchFaceText(final CustomizeWatchMessagingObject delivery) {
+    private void updateDigitalWatchFaceText(final WatchMessaging delivery) {
         DigitalWatchfaceActivity.
                 getInstance().
                 runOnUiThread(
@@ -86,22 +92,19 @@ public class DataLayerListenerService extends WearableListenerService {
                             @Override
                             public void run() {
                                 DigitalWatchfaceActivity d = DigitalWatchfaceActivity.getInstance();
-                                d.setPrimaryText(delivery.getTopText().getValue());
-                                d.setSecondaryText(delivery.getBottomText().getValue());
+                                d.setPrimaryText(delivery.getObject(WatchMessaging.ITEMS.TOPTEXTTAG, String.class));
+                                d.setSecondaryText(delivery.getObject(WatchMessaging.ITEMS.BOTTOMTEXTTAG, String.class));
                             }
                         }
 
                 );
     }
 
-    public CustomizeWatchMessagingObject decodeDataRequest(DataMapItem delivery, CustomizeWatchMessagingObject mo) {
-        if (null != delivery.getDataMap().getString(mo.getTopText().getKey())) mo.setTopText(delivery.getDataMap().getString(mo.getTopText().getKey()));
-        if (null != delivery.getDataMap().getString(mo.getBottomText().getKey())) mo.setBottomText(delivery.getDataMap().getString(mo.getBottomText().getKey()));
-        if (null != delivery.getDataMap().getString(mo.getBackgroundImage().getKey())) mo.setTopText(delivery.getDataMap().getString(mo.getBackgroundImage().getKey()));
-        Log.d("CASUALWear","Top:"+ mo.getTopText().getKey()+ mo.getTopText().getValue()+", Bottom:"+mo.getBottomText().getKey()+mo.getBottomText().getValue());
-
-        //if (null!=delivery.getDataMap().getAsset(TOPTEXTTAG).getUri())setBackgroundImage(delivery.getDataMap().getAsset(BACKGROUNDIMAGE).getUri());
-
+    public WatchMessaging decodeDataRequest(DataMapItem delivery, WatchMessaging mo) {
+        if (null != delivery.getDataMap().getString(mo.TABLENAME)) mo.setTableJSON(delivery.getDataMap().getString(mo.TABLENAME));
+        for (WatchMessaging.ITEMS i: WatchMessaging.ITEMS.values()){
+            Log.d(TAG,"item:"+i.name()+" value:"+mo.getObject(i,String.class));
+        }
         return mo;
     }
 }

@@ -66,6 +66,10 @@ android {
             runProguard false
             signingConfig signingConfigs.release
         }
+        debug {
+            jniDebugBuild true
+            renderscriptDebugBuild true
+        }
     }
 }
 
