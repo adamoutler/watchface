@@ -5,7 +5,7 @@
     <string name="graybackgrounddescription">a gray background</string>
     <string name="logo">logo</string>
     <string name="app_name">CASUALWear</string>
-    <string name="message">The CASUALWear face should already be installed. This view is here for easy removal.  Should you ever choose to do so, you can do it from the launcher</string>
+    <string name="message">The CASUALWear face should already be installed if you have an Android Wear device. You can use this view to customize the watch text</string>
     <string name="CASUALWear">CASUALWear</string>
     <string name="sendButtonText">send</string>
 </resources>
