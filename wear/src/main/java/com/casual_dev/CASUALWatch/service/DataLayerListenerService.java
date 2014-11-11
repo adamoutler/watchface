@@ -4,7 +4,8 @@ import android.net.Uri;
 import android.util.Log;
 
 import com.casual_dev.CASUALWatch.digital.DigitalWatchfaceActivity;
-import com.casual_dev.WatchMessaging;
+import com.casual_dev.mobilewearmessaging.Message;
+import com.casual_dev.mobilewearmessaging.WatchMessaging;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.data.FreezableUtils;
@@ -18,18 +19,29 @@ import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import static com.casual_dev.mobilewearmessaging.Message.ITEMS;
+
 /**
  * Created by adamoutler on 11/3/14.
  */
 public class DataLayerListenerService extends WearableListenerService {
 
-    private static final String TAG = "CASUALDataLayerSample";
+    private static final String TAG = "CASUALDataLayerService";
     private static final String START_ACTIVITY_PATH = "CDEVMessage";
     private static final String DATA_ITEM_RECEIVED_PATH = "/CDEVMessage";
+    public static DataLayerListenerService dataListener;
 
+
+    public DataLayerListenerService(){
+        dataListener=this;
+    }
+
+
+    public static DataLayerListenerService getInstance(){
+        return dataListener;
+    }
 
     @Override
-
     public void onDataChanged(DataEventBuffer dataEvents) {
         Log.d(TAG, "onDataChanged: " + dataEvents);
 
@@ -71,7 +83,7 @@ public class DataLayerListenerService extends WearableListenerService {
                     e.printStackTrace();
                 }
 
-                Log.d(TAG, "top text "+delivery.getObject(WatchMessaging.ITEMS.TOPTEXTTAG, String.class));
+                Log.d(TAG, "top text " + delivery.getObject(ITEMS.TOPTEXTTAG, String.class));
                 if (DigitalWatchfaceActivity.getInstance() != null) {
                     updateDigitalWatchFaceText(delivery);
                 }
@@ -92,8 +104,8 @@ public class DataLayerListenerService extends WearableListenerService {
                             @Override
                             public void run() {
                                 DigitalWatchfaceActivity d = DigitalWatchfaceActivity.getInstance();
-                                d.setPrimaryText(delivery.getObject(WatchMessaging.ITEMS.TOPTEXTTAG, String.class));
-                                d.setSecondaryText(delivery.getObject(WatchMessaging.ITEMS.BOTTOMTEXTTAG, String.class));
+                                d.setPrimaryText(delivery.getObject(ITEMS.TOPTEXTTAG, String.class));
+                                d.setSecondaryText(delivery.getObject(ITEMS.BOTTOMTEXTTAG, String.class));
                             }
                         }
 
@@ -102,7 +114,7 @@ public class DataLayerListenerService extends WearableListenerService {
 
     public WatchMessaging decodeDataRequest(DataMapItem delivery, WatchMessaging mo) {
         if (null != delivery.getDataMap().getString(mo.TABLENAME)) mo.setTableJSON(delivery.getDataMap().getString(mo.TABLENAME));
-        for (WatchMessaging.ITEMS i: WatchMessaging.ITEMS.values()){
+        for (Message.ITEMS i: Message.ITEMS.values()){
             Log.d(TAG,"item:"+i.name()+" value:"+mo.getObject(i,String.class));
         }
         return mo;

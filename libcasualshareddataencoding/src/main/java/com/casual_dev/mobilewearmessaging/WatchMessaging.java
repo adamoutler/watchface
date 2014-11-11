@@ -1,12 +1,15 @@
-package com.casual_dev;
+package com.casual_dev.mobilewearmessaging;
 
 
 import com.google.gson.Gson;
+
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Hashtable;
+
+import static com.casual_dev.mobilewearmessaging.Message.ITEMS;
 
 ;
 
@@ -22,13 +25,8 @@ public class WatchMessaging {
     public final static String TABLENAME = "Fuzzywuzzy";
     public final String dataFolder;
 
-    public enum ITEMS {
-        TOPTEXTTAG,
-        BOTTOMTEXTTAG,
-        BACKGROUNDIMAGE,
-    }
 
-    Hashtable<ITEMS, String> table = new Hashtable<>();
+    Hashtable<Message.ITEMS, String> table = new Hashtable<>();
 
     public WatchMessaging(String dataFolder) {
         this.dataFolder = dataFolder;
@@ -67,6 +65,7 @@ public class WatchMessaging {
     }
     public void load() throws IOException, ClassNotFoundException {
         Storage.loadMap(this);
+        if (table==null)this.createBlankTable();
     }
 
 
@@ -77,10 +76,6 @@ public class WatchMessaging {
     }
 
 
-    public void putObject(ITEMS itemName, Object itemValue) {
-        table.put(itemName, new Gson().toJson(itemValue));
-    }
-
     public String getTableJSON(){
         return new Gson().toJson(table);
     }
@@ -89,15 +84,45 @@ public class WatchMessaging {
         table=new Gson().fromJson(json,Hashtable.class);
     }
 
-    public <T> T getObject(ITEMS i, Class<T> c){
-        try {
-           return c.cast(new Gson().fromJson(table.get(i.name()), c));
 
+
+    public void putObject(ITEMS itemName, Object itemValue) {
+        if (! itemValue.getClass().getName().equals(Message.getClassOfItem(itemName).getName())){
+            throw new ClassCastException("itemName was "+ Message.getClassOfItem(itemName).getName() +" but the value passed in was "+itemValue.getClass().getName());
+        }
+        table.put(itemName, new Gson().toJson(itemValue));
+    }
+
+    /**
+     * gets an object fom the table
+     * @param i
+     * @param <T>
+     * @return
+     */
+    //@Contract ("null->Message.getClassOfItem(i)")
+    public <T>T getObject(ITEMS i, Class<T>c){
+
+        try {
+            Object o=new Gson().fromJson(table.get(i),c);
+            if (o==null||o.hashCode()==0){
+                 o=new Gson().fromJson(table.get(i.name()),c);
+                if (o==null||o.hashCode()==0) {
+                    return null;
+                }
+            }
+            if (!c.getName().equals(o.getClass().getName())){
+                throw new ClassCastException("itemName is classified as a "+ Message.getClassOfItem(i).getName() +" but the Class passed in was "+ c.getName());
+            }
+            return (T) c.cast(o);
         } catch (ClassCastException ex){
             ex.printStackTrace();
             return null;
         }
 
 
+
+
     }
+
+
 }

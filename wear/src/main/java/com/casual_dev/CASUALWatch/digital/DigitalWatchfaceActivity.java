@@ -30,7 +30,10 @@ import android.widget.TextView;
 import com.casual_dev.CASUALWatch.R;
 import com.casual_dev.CASUALWatch.widget.MyTextView;
 import com.casual_dev.CASUALWatch.widget.WatchFaceLifecycle;
+import com.casual_dev.mobilewearmessaging.Message;
+import com.casual_dev.mobilewearmessaging.WatchMessaging;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -71,6 +74,7 @@ public class DigitalWatchfaceActivity extends Activity implements WatchFaceLifec
         public void onReceive(Context context, Intent intent) {
             int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
             batteryLevelChanged(level);
+
         }
 
 
@@ -154,6 +158,16 @@ public class DigitalWatchfaceActivity extends Activity implements WatchFaceLifec
         mCasual = (TextView) findViewById(R.id.LogoText);
         mCasualDim = (TextView) findViewById(R.id.LogoTextDim);
         mBackLogo = (ImageView) findViewById(R.id.logo);
+        WatchMessaging wm=new WatchMessaging(getFilesDir().getAbsolutePath());
+        try {
+            wm.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        setDataItems(wm);
 
     }
 
@@ -197,8 +211,16 @@ public class DigitalWatchfaceActivity extends Activity implements WatchFaceLifec
 
     }
 
+
+    public void setDataItems(WatchMessaging wm){
+        setPrimaryText(wm.getObject(Message.ITEMS.TOPTEXTTAG, String.class));
+        setSecondaryText((wm.getObject( Message.ITEMS.BOTTOMTEXTTAG, String.class)));
+    }
+
+
     public void setPrimaryText(String s) {
-        if (s.isEmpty()) {
+        ;
+        if (null==s||s.isEmpty()) {
             s = "CASUAL";
         }
         mCasual.setText(s);
@@ -206,7 +228,8 @@ public class DigitalWatchfaceActivity extends Activity implements WatchFaceLifec
     }
 
     public void setSecondaryText(String s) {
-        if (s.isEmpty()) {
+
+        if (null==s||s.isEmpty()) {
             s = "DEV";
         }
         mDev.setText(s);

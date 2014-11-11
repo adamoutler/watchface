@@ -1,4 +1,4 @@
-package com.casual_dev;
+package com.casual_dev.mobilewearmessaging;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -17,9 +17,9 @@ public class Storage {
         file.writeObject(watchMessaging.getTable());
     }
 
-    static Hashtable<WatchMessaging.ITEMS, String> loadMap(WatchMessaging watchMessaging) throws IOException, ClassNotFoundException {
+    static Hashtable<Message.ITEMS, String> loadMap(WatchMessaging watchMessaging) throws IOException, ClassNotFoundException {
         ObjectInputStream file = new ObjectInputStream(new FileInputStream(new File(watchMessaging.dataFolder, WatchMessaging.STORAGE)));
-        watchMessaging.setTable((Hashtable<WatchMessaging.ITEMS,String>) file.readObject());
+        watchMessaging.setTable((Hashtable<Message.ITEMS,String>) file.<Hashtable<Message.ITEMS,String>>readObject());
         return watchMessaging.getTable();
     }
 }

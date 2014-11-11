@@ -22,7 +22,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.casual_dev.WatchMessaging;
+import com.casual_dev.mobilewearmessaging.WatchMessaging;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.wearable.DataApi;
@@ -32,7 +32,8 @@ import com.google.android.gms.wearable.Wearable;
 
 import java.io.IOException;
 
-import static com.casual_dev.WatchMessaging.ITEMS.BOTTOMTEXTTAG;
+import static com.casual_dev.mobilewearmessaging.Message.ITEMS;
+
 
 
 public class MainActivity extends Activity implements GoogleApiClient.ConnectionCallbacks {
@@ -80,25 +81,31 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
         bottomText = (EditText) findViewById(R.id.userMessage2);
         topText = (EditText) findViewById(R.id.userMessage);
 
-        topText.setText(mo.getObject(WatchMessaging.ITEMS.TOPTEXTTAG,String.class) + " ");
-        bottomText.setText(mo.getObject(BOTTOMTEXTTAG,String.class)+" ");
-
-        for (Object o:mo.getTable().keySet()){
-
-            Log.d(TAG, o.toString()+" "+ mo.getTable().get(o).toString()+ mo.getObject(WatchMessaging.ITEMS.TOPTEXTTAG,String.class));
-
+        try {
+            Log.d(TAG,"Loading data into table");
+            mo.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
+        for (Object o:mo.getTable().keySet()){
+            Log.d(TAG,"Table Information: " +o.toString()+" mo.getTable.get+--  +mo.getObject-"+mo.getObject((ITEMS)o,String.class)+"-");
+        }
+        topText.setText(mo.getObject(ITEMS.TOPTEXTTAG,String.class));
+        bottomText.setText(mo.getObject(ITEMS.BOTTOMTEXTTAG,String.class));
 
 
-        Log.d(TAG, "text:" + mo.getObject(WatchMessaging.ITEMS.TOPTEXTTAG,String.class));
+
+        Log.d(TAG, "text:" + mo.getObject(ITEMS.TOPTEXTTAG,String.class));
         sendText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.d(TAG , topText.getText().toString());
                 Log.d(TAG , bottomText.getText().toString());
 
-                mo.putObject(BOTTOMTEXTTAG, bottomText.getText().toString());
-                mo.putObject(WatchMessaging.ITEMS.TOPTEXTTAG,topText.getText().toString());
+                mo.putObject(ITEMS.BOTTOMTEXTTAG, bottomText.getText().toString());
+                mo.putObject(ITEMS.TOPTEXTTAG,topText.getText().toString());
 
                 PendingResult<DataApi.DataItemResult> pendingResult = Wearable.DataApi.putDataItem(mApiClient, encodeDataRequest(mo));
                 try {
