@@ -26,7 +26,7 @@ public class WatchMessaging {
     public final String dataFolder;
 
 
-    Hashtable<Message.ITEMS, String> table = new Hashtable<>();
+    Hashtable<Message.ITEMS, Object> table = new Hashtable<>();
 
     public WatchMessaging(String dataFolder) {
         this.dataFolder = dataFolder;
@@ -53,10 +53,10 @@ public class WatchMessaging {
 
 
 
-    public Hashtable<ITEMS, String> getTable() {
+    public Hashtable<ITEMS, Object> getTable() {
         return table;
     }
-    void setTable(Hashtable<ITEMS, String> table) {
+    void setTable(Hashtable<ITEMS, Object> table) {
         this.table=table;
     }
 
@@ -90,23 +90,22 @@ public class WatchMessaging {
         if (! itemValue.getClass().getName().equals(Message.getClassOfItem(itemName).getName())){
             throw new ClassCastException("itemName was "+ Message.getClassOfItem(itemName).getName() +" but the value passed in was "+itemValue.getClass().getName());
         }
-        table.put(itemName, new Gson().toJson(itemValue));
+        table.put(itemName, itemValue);
     }
 
     /**
      * gets an object fom the table
-     * @param i
-     * @param <T>
+     * @param i item to fetch
+     * @param c class to return
      * @return
      */
-
-    public <T>T getObject(ITEMS i, Class<T>c){
+    public <T>T getObject(ITEMS i, Class<T> c){
 
         try {
-            Object o=new Gson().fromJson(table.get(i),c);
+            Object o=table.get(i);
 
             if (o==null||o.hashCode()==0){
-                 o=new Gson().fromJson(table.get(i.name()),c);
+                 o=table.get(i.name());
                 if (o==null||o.hashCode()==0) {
                     return null;
                 }

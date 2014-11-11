@@ -17,9 +17,9 @@ public class Storage {
         file.writeObject(watchMessaging.getTable());
     }
 
-    static Hashtable<Message.ITEMS, String> loadMap(WatchMessaging watchMessaging) throws IOException, ClassNotFoundException {
+    static Hashtable<Message.ITEMS, Object> loadMap(WatchMessaging watchMessaging) throws IOException, ClassNotFoundException {
         ObjectInputStream file = new ObjectInputStream(new FileInputStream(new File(watchMessaging.dataFolder, WatchMessaging.STORAGE)));
-        watchMessaging.setTable((Hashtable<Message.ITEMS,String>) file.<Hashtable<Message.ITEMS,String>>readObject());
+        watchMessaging.setTable((Hashtable<Message.ITEMS,Object>) file.<Hashtable<Message.ITEMS,String>>readObject());
         return watchMessaging.getTable();
     }
 }

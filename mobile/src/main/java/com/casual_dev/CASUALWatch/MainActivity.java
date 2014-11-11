@@ -86,7 +86,6 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
         bottomText = (EditText) findViewById(R.id.userMessage2);
         topText = (EditText) findViewById(R.id.userMessage);
         pb=(ProgressBar) findViewById(R.id.progressBar);
-
         final WatchMessaging mo = wm.getComms();
 
         topText.setText(mo.getObject(ITEMS.TOPTEXTTAG, String.class));
@@ -132,6 +131,7 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
                 Log.d(TAG,"DATA ITEM. Listing data items.");
                 Map<String, DataItemAsset> m=di.getAssets();
 
+
                 for (String item: m.keySet()){
 
                     Log.d(TAG,"DATA ITEM"+item +"value:"+m.get(item));
@@ -156,6 +156,9 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
             }
         });
     }
+
+
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
