@@ -3,6 +3,7 @@ package com.casual_dev.CASUALWatch.service;
 import android.net.Uri;
 import android.util.Log;
 
+import com.casual_dev.CASUALWatch.analog.AnalogWatchfaceActivity;
 import com.casual_dev.CASUALWatch.digital.DigitalWatchfaceActivity;
 import com.casual_dev.mobilewearmessaging.Message;
 import com.casual_dev.mobilewearmessaging.WatchMessaging;
@@ -85,7 +86,11 @@ public class DataLayerListenerService extends WearableListenerService {
 
                 Log.d(TAG, "top text " + delivery.getObject(ITEMS.TOPTEXTTAG, String.class));
                 if (DigitalWatchfaceActivity.getInstance() != null) {
+                    DigitalWatchfaceActivity da=DigitalWatchfaceActivity.getInstance();
                     updateDigitalWatchFaceText(delivery);
+                }
+                if (AnalogWatchfaceActivity.getInstance() != null) {
+                    updateAnalogWatchFaceText(delivery);
                 }
             }
 
@@ -94,6 +99,10 @@ public class DataLayerListenerService extends WearableListenerService {
                     DATA_ITEM_RECEIVED_PATH, payload);
         }
     }
+
+
+
+
 
     private void updateDigitalWatchFaceText(final WatchMessaging delivery) {
         DigitalWatchfaceActivity.
@@ -111,7 +120,20 @@ public class DataLayerListenerService extends WearableListenerService {
 
                 );
     }
+    private void updateAnalogWatchFaceText(final WatchMessaging delivery) {
+        AnalogWatchfaceActivity.getInstance().runOnUiThread(
+                        new Runnable() {
 
+                            @Override
+                            public void run() {
+                                AnalogWatchfaceActivity d = AnalogWatchfaceActivity.getInstance();
+                                d.setPrimaryText(delivery.getObject(ITEMS.TOPTEXTTAG, String.class));
+                                d.setSecondaryText(delivery.getObject(ITEMS.BOTTOMTEXTTAG, String.class));
+                            }
+                        }
+
+                );
+    }
     public WatchMessaging decodeDataRequest(DataMapItem delivery, WatchMessaging mo) {
         if (null != delivery.getDataMap().getString(mo.TABLENAME)) mo.setTableJSON(delivery.getDataMap().getString(mo.TABLENAME));
         for (Message.ITEMS i: Message.ITEMS.values()){

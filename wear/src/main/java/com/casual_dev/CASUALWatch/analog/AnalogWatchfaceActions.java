@@ -50,6 +50,12 @@ public class AnalogWatchfaceActions extends FrameLayout implements IWatchface {
     private boolean mInflated;
     private boolean mActive;
     private Animation animFade;
+    static AnalogWatchfaceActions instance;
+
+
+    public static AnalogWatchfaceActions getInstance() {
+        return instance;
+    }
 
     public AnalogWatchfaceActions(Context context) {
 

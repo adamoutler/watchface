@@ -2,7 +2,7 @@
 <com.casual_dev.CASUALWatch.analog.AnalogWatchfaceActions xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/watchface"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="match_parent"
     tools:context=".WatchfaceActivity">
 
@@ -15,7 +15,50 @@
         android:id="@+id/shadow_overlay"
         style="@style/GearsWatchLayer"
         android:src="@drawable/overlay_shadow_normal" />
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_gravity="center"
+        android:layout_margin="0dp"
+        android:divider="#000000"
+        android:dividerPadding="0dp"
+        android:gravity="end"
+        android:maxLines="1"
+        android:orientation="vertical"
+        android:padding="0dp"
+        android:showDividers="middle"
+        android:weightSum="1">
 
+        <TextView
+            android:id="@+id/analogtoptext"
+            android:fontFamily="sans-serif-thin"
+
+            android:textAlignment="center"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="40sp"
+            android:textColor="#3898ca"
+            android:text="@string/casual"/>
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="15sp"
+            />
+        <TextView
+            android:id="@+id/analogbottomtext"
+            android:fontFamily="sans-serif-thin"
+            android:textAlignment="center"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#3898ca"
+            android:textSize="40sp"
+            android:text="@string/dev"/>
+    </LinearLayout>
     <ImageView
         android:id="@+id/hand_hour"
         style="@style/GearsWatchLayer.Hand"
@@ -30,5 +73,6 @@
         android:id="@+id/hand_second"
         style="@style/GearsWatchLayer.Hand"
         android:src="@drawable/hand_second_normal" />
+
 
 </com.casual_dev.CASUALWatch.analog.AnalogWatchfaceActions>
