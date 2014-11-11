@@ -92,7 +92,7 @@ public class DataLayerListenerService extends WearableListenerService {
                 if (AnalogWatchfaceActivity.getInstance() != null) {
                     updateAnalogWatchFaceText(delivery);
                 }
-                e
+
             }
 
             // Send the RPC

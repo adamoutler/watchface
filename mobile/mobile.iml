@@ -78,7 +78,6 @@
     <orderEntry type="library" exported="" name="support-v4-20.0.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-5.0.89" level="project" />
     <orderEntry type="module" module-name="libcasualshareddataencoding" exported="" />
-    <orderEntry type="library" name="play-services-wearable-6.1.71" level="project" />
   </component>
 </module>
 
