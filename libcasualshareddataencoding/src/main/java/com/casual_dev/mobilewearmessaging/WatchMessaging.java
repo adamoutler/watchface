@@ -99,11 +99,12 @@ public class WatchMessaging {
      * @param <T>
      * @return
      */
-    //@Contract ("null->Message.getClassOfItem(i)")
+
     public <T>T getObject(ITEMS i, Class<T>c){
 
         try {
             Object o=new Gson().fromJson(table.get(i),c);
+
             if (o==null||o.hashCode()==0){
                  o=new Gson().fromJson(table.get(i.name()),c);
                 if (o==null||o.hashCode()==0) {

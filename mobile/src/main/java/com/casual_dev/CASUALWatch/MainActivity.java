@@ -21,27 +21,31 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 
 import com.casual_dev.mobilewearmessaging.WatchMessaging;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.wearable.DataApi;
+import com.google.android.gms.wearable.DataItem;
+import com.google.android.gms.wearable.DataItemAsset;
 import com.google.android.gms.wearable.PutDataMapRequest;
 import com.google.android.gms.wearable.PutDataRequest;
 import com.google.android.gms.wearable.Wearable;
 
 import java.io.IOException;
+import java.util.Map;
 
 import static com.casual_dev.mobilewearmessaging.Message.ITEMS;
 
 
-
 public class MainActivity extends Activity implements GoogleApiClient.ConnectionCallbacks {
     private static final String TAG = "CASUALMainActivity";
-    WatchMessaging mo;
     Button sendText;
     EditText topText;
     EditText bottomText;
+    WearMessenger wm;
+    ProgressBar pb;
     //Uri backgroundURI;
 
     GoogleApiClient mApiClient;
@@ -50,7 +54,8 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mainactivity);
-        mo = new WatchMessaging(getFilesDir().getAbsolutePath());
+        wm = new WearMessenger(getFilesDir().getAbsolutePath());
+
 
         setWidgets();
 
@@ -80,39 +85,26 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
         sendText = (Button) findViewById(R.id.sendtext);
         bottomText = (EditText) findViewById(R.id.userMessage2);
         topText = (EditText) findViewById(R.id.userMessage);
+        pb=(ProgressBar) findViewById(R.id.progressBar);
 
-        try {
-            Log.d(TAG,"Loading data into table");
-            mo.load();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        for (Object o:mo.getTable().keySet()){
-            Log.d(TAG,"Table Information: " +o.toString()+" mo.getTable.get+--  +mo.getObject-"+mo.getObject((ITEMS)o,String.class)+"-");
-        }
-        topText.setText(mo.getObject(ITEMS.TOPTEXTTAG,String.class));
-        bottomText.setText(mo.getObject(ITEMS.BOTTOMTEXTTAG,String.class));
+        final WatchMessaging mo = wm.getComms();
 
+        topText.setText(mo.getObject(ITEMS.TOPTEXTTAG, String.class));
+        bottomText.setText(mo.getObject(ITEMS.BOTTOMTEXTTAG, String.class));
+        pb.setProgress(0);
+        pb.setVisibility(View.GONE);
 
-
-        Log.d(TAG, "text:" + mo.getObject(ITEMS.TOPTEXTTAG,String.class));
+        Log.d(TAG, "text:" + mo.getObject(ITEMS.TOPTEXTTAG, String.class));
         sendText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d(TAG , topText.getText().toString());
-                Log.d(TAG , bottomText.getText().toString());
+                pb.setProgress(-1);
+                pb.setVisibility(View.VISIBLE);
+                Log.d(TAG, "Sending:"+ topText.getText().toString() +" and "+ bottomText.getText().toString());
 
                 mo.putObject(ITEMS.BOTTOMTEXTTAG, bottomText.getText().toString());
-                mo.putObject(ITEMS.TOPTEXTTAG,topText.getText().toString());
-
-                PendingResult<DataApi.DataItemResult> pendingResult = Wearable.DataApi.putDataItem(mApiClient, encodeDataRequest(mo));
-                try {
-                    mo.store();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                mo.putObject(ITEMS.TOPTEXTTAG, topText.getText().toString());
+                sendAction().start();
 
             }
         });
@@ -120,8 +112,8 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
 
     public PutDataRequest encodeDataRequest(WatchMessaging mo) {
         PutDataMapRequest dataMap = PutDataMapRequest.create(WatchMessaging.getMessageDataPath());
-        dataMap.getDataMap().putString(WatchMessaging.TABLENAME,mo.getTableJSON());
-        Log.d(TAG ,"Table"+dataMap.getDataMap().get(WatchMessaging.TABLENAME));
+        dataMap.getDataMap().putString(WatchMessaging.TABLENAME, mo.getTableJSON());
+        Log.d(TAG, "Table" + dataMap.getDataMap().get(WatchMessaging.TABLENAME));
         return dataMap.asPutDataRequest();
     }
 
@@ -130,13 +122,42 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
 
     }
 
+    Thread sendAction(){
+        return new Thread(new Runnable() {
+            @Override
+            public void run() {
+                PendingResult<DataApi.DataItemResult> pendingResult = Wearable.DataApi.putDataItem(mApiClient, encodeDataRequest(wm.getComms()));
+                DataApi.DataItemResult dr=pendingResult.await();
+                DataItem di= dr.getDataItem();
+                Log.d(TAG,"DATA ITEM. Listing data items.");
+                Map<String, DataItemAsset> m=di.getAssets();
 
+                for (String item: m.keySet()){
+
+                    Log.d(TAG,"DATA ITEM"+item +"value:"+m.get(item));
+                }
+                Log.d(TAG,"DATA ITEM"+di.toString());
+                try {
+                    wm.getComms().store(); //store the data
+                    runOnUiThread(  //for setting the progress bar
+                            new Runnable() {
+                                @Override
+                                public void run() {
+                                    pb.setProgress(0);
+                                    pb.setVisibility(View.GONE);
+
+                                }
+                            });
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+        });
+    }
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        try {
-            mo.store();
-        } catch (IOException e) {
-        }
     }
 }

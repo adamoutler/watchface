@@ -1,0 +1,7 @@
+<root>
+    <item name='com.google.gson.Gson T fromJson(java.lang.String, java.lang.Class&lt;T&gt;)'>
+        <annotation name='org.jetbrains.annotations.Contract'>
+            <val val="&quot;null,null-&gt;null&quot;" />
+        </annotation>
+    </item>
+</root>

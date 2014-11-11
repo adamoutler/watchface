@@ -92,6 +92,7 @@ public class DataLayerListenerService extends WearableListenerService {
                 if (AnalogWatchfaceActivity.getInstance() != null) {
                     updateAnalogWatchFaceText(delivery);
                 }
+                e
             }
 
             // Send the RPC
@@ -122,17 +123,17 @@ public class DataLayerListenerService extends WearableListenerService {
     }
     private void updateAnalogWatchFaceText(final WatchMessaging delivery) {
         AnalogWatchfaceActivity.getInstance().runOnUiThread(
-                        new Runnable() {
+                new Runnable() {
 
-                            @Override
-                            public void run() {
-                                AnalogWatchfaceActivity d = AnalogWatchfaceActivity.getInstance();
-                                d.setPrimaryText(delivery.getObject(ITEMS.TOPTEXTTAG, String.class));
-                                d.setSecondaryText(delivery.getObject(ITEMS.BOTTOMTEXTTAG, String.class));
-                            }
-                        }
+                    @Override
+                    public void run() {
+                        AnalogWatchfaceActivity d = AnalogWatchfaceActivity.getInstance();
+                        d.setPrimaryText(delivery.getObject(ITEMS.TOPTEXTTAG, String.class));
+                        d.setSecondaryText(delivery.getObject(ITEMS.BOTTOMTEXTTAG, String.class));
+                    }
+                }
 
-                );
+        );
     }
     public WatchMessaging decodeDataRequest(DataMapItem delivery, WatchMessaging mo) {
         if (null != delivery.getDataMap().getString(mo.TABLENAME)) mo.setTableJSON(delivery.getDataMap().getString(mo.TABLENAME));

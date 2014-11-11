@@ -58,18 +58,20 @@ public class AnalogWatchfaceActions extends FrameLayout implements IWatchface {
     }
 
     public AnalogWatchfaceActions(Context context) {
-
         super(context);
+        if (isInEditMode()) return;
         init(context, 0);
     }
 
     public AnalogWatchfaceActions(Context context, AttributeSet attrs) {
         super(context, attrs);
+        if (isInEditMode()) return;
         init(context, 0);
     }
 
     public AnalogWatchfaceActions(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+        if (isInEditMode()) return;
         init(context, defStyle);
     }
 
@@ -84,6 +86,7 @@ public class AnalogWatchfaceActions extends FrameLayout implements IWatchface {
     @DebugLog
     @Override
     protected void onFinishInflate() {
+        if (isInEditMode()) return;
         super.onFinishInflate();
         ButterKnife.inject(this, getRootView());
         mInflated = true;
@@ -92,6 +95,7 @@ public class AnalogWatchfaceActions extends FrameLayout implements IWatchface {
     @DebugLog
     @Override
     public void onAttachedToWindow() {
+        if (isInEditMode()) return;
         super.onAttachedToWindow();
         mWatch.onAttachedToWindow();
     }
@@ -99,6 +103,7 @@ public class AnalogWatchfaceActions extends FrameLayout implements IWatchface {
     @DebugLog
     @Override
     public void onDetachedFromWindow() {
+        if (isInEditMode()) return;
         super.onDetachedFromWindow();
         mWatch.onDetachedFromWindow();
     }
@@ -126,6 +131,7 @@ public class AnalogWatchfaceActions extends FrameLayout implements IWatchface {
     @Override
     @DebugLog
     public void onActiveStateChanged(boolean active) {
+        if (isInEditMode()) return;
         this.mActive = active;
         setImageResources();
     }
