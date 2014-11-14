@@ -14,7 +14,30 @@ package com.casual_dev.CASUALWatch.digital;
         limitations under the License.
 */
 
-public class DigitalWatchfaceApp extends DigitalWatchfaceActions {
+import android.os.Bundle;
+import android.util.Log;
 
+import com.casual_dev.casualmessager.Message;
+import com.casual_dev.casualmessager.MessageNotifier;
+import com.casual_dev.casualmessager.WatchMessaging;
 
+public class DigitalWatchfaceApp extends DigitalWatchfaceActions implements MessageNotifier.MessageInterface {
+    @Override
+    protected  void onCreate(Bundle b){
+        super.onCreate(b);
+        MessageNotifier.connect(this);
+    }
+
+    @Override
+    public void onMessageReceived(final WatchMessaging message) {
+        Log.d("CASUALWEAR",message.toString());
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                setPrimaryText(message.getObject(Message.ITEMS.TOPTEXTTAG, String.class));
+                setSecondaryText(message.getObject(Message.ITEMS.BOTTOMTEXTTAG, String.class));
+            }
+        });
+    }
 }

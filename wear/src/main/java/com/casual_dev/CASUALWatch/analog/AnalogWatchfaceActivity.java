@@ -5,14 +5,13 @@ import android.widget.TextView;
 
 import com.casual_dev.CASUALWatch.R;
 import com.casual_dev.CASUALWatch.widget.WatchFaceLifecycle;
-import com.casual_dev.mobilewearmessaging.Message;
-import com.casual_dev.mobilewearmessaging.WatchMessaging;
+import com.casual_dev.casualmessager.Message;
+import com.casual_dev.casualmessager.MessageNotifier;
+import com.casual_dev.casualmessager.WatchMessaging;
 import com.twotoasters.watchface.gears.activity.GearsWatchfaceActivity;
 import com.twotoasters.watchface.gears.widget.IWatchface;
 
-import java.io.IOException;
-
-public class AnalogWatchfaceActivity extends GearsWatchfaceActivity implements WatchFaceLifecycle.Listener {
+public class AnalogWatchfaceActivity extends GearsWatchfaceActivity implements WatchFaceLifecycle.Listener, MessageNotifier.MessageInterface {
 
     static AnalogWatchfaceActivity instance;
 
@@ -36,23 +35,22 @@ public class AnalogWatchfaceActivity extends GearsWatchfaceActivity implements W
 
 
     @Override
-    protected void onCreate(Bundle saved){
+    protected void onCreate(Bundle saved) {
         super.onCreate(saved);
         instance = this;
         setWidgets();
+        MessageNotifier.connect(this);
+
     }
 
     private void setWidgets() {
 
-        mCASUAL =(TextView) findViewById(R.id.analogtoptext);
-        mDev =(TextView) findViewById(R.id.analogbottomtext);
+        mCASUAL = (TextView) findViewById(R.id.analogtoptext);
+        mDev = (TextView) findViewById(R.id.analogbottomtext);
 
-        WatchMessaging wm=new WatchMessaging(getFilesDir().getAbsolutePath());
+        WatchMessaging wm = new WatchMessaging(getFilesDir().getAbsolutePath());
         try {
             wm.load();
-        } catch (IOException e) {
-            e.printStackTrace();
-
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -60,7 +58,7 @@ public class AnalogWatchfaceActivity extends GearsWatchfaceActivity implements W
     }
 
     @Override
-    protected void onDestroy(){
+    protected void onDestroy() {
         super.onDestroy();
     }
 
@@ -85,14 +83,14 @@ public class AnalogWatchfaceActivity extends GearsWatchfaceActivity implements W
     }
 
 
-        public void setDataItems(WatchMessaging wm){
-            setPrimaryText(wm.getObject(Message.ITEMS.TOPTEXTTAG, String.class));
-            setSecondaryText((wm.getObject( Message.ITEMS.BOTTOMTEXTTAG, String.class)));
-        }
+    public void setDataItems(WatchMessaging wm) {
+        setPrimaryText(wm.getObject(Message.ITEMS.TOPTEXTTAG, String.class));
+        setSecondaryText((wm.getObject(Message.ITEMS.BOTTOMTEXTTAG, String.class)));
+    }
 
     public void setPrimaryText(String s) {
         ;
-        if (null==s||s.isEmpty()) {
+        if (null == s || s.isEmpty()) {
             s = "CASUAL";
         }
         mCASUAL.setText(s);
@@ -100,7 +98,7 @@ public class AnalogWatchfaceActivity extends GearsWatchfaceActivity implements W
 
     public void setSecondaryText(String s) {
 
-        if (null==s||s.isEmpty()) {
+        if (null == s || s.isEmpty()) {
             s = "DEV";
         }
         mDev.setText(s);
@@ -108,4 +106,16 @@ public class AnalogWatchfaceActivity extends GearsWatchfaceActivity implements W
     }
 
 
+    @Override
+    public void onMessageReceived(final WatchMessaging message) {
+        runOnUiThread(new Runnable() {
+
+            @Override
+            public void run() {
+                mCASUAL.setText(message.getObject(Message.ITEMS.TOPTEXTTAG, String.class));
+                mDev.setText(message.getObject(Message.ITEMS.BOTTOMTEXTTAG, String.class));
+
+            }
+        });
+    }
 }

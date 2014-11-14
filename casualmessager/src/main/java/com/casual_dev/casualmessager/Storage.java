@@ -1,4 +1,4 @@
-package com.casual_dev.mobilewearmessaging;
+package com.casual_dev.casualmessager;
 
 import java.io.File;
 import java.io.FileInputStream;

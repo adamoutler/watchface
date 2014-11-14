@@ -1,15 +1,14 @@
-package com.casual_dev.mobilewearmessaging;
+package com.casual_dev.casualmessager;
 
 
 import com.google.gson.Gson;
-
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Hashtable;
 
-import static com.casual_dev.mobilewearmessaging.Message.ITEMS;
+import static com.casual_dev.casualmessager.Message.ITEMS;
 
 ;
 
@@ -24,9 +23,8 @@ public class WatchMessaging {
     public final static String MESSAGEPATH = "/CDEVMessage";
     public final static String TABLENAME = "Fuzzywuzzy";
     public final String dataFolder;
+    Message m=new Message();
 
-
-    Hashtable<Message.ITEMS, Object> table = new Hashtable<>();
 
     public WatchMessaging(String dataFolder) {
         this.dataFolder = dataFolder;
@@ -35,37 +33,41 @@ public class WatchMessaging {
             if (new File(dataFolder, STORAGE).exists() && new File(dataFolder, STORAGE).length() > 1) {
                 Storage.loadMap(this);
             }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
 
     private void createBlankTable() {
         for (ITEMS t : ITEMS.values()) {
-            table.put(t, "");
+            m.table.put(t, "");
         }
     }
 
 
-
+    public Message getMessage(){
+        return m;
+    }
 
     public Hashtable<ITEMS, Object> getTable() {
-        return table;
+        return m.table;
     }
     void setTable(Hashtable<ITEMS, Object> table) {
-        this.table=table;
+        this.m.table=table;
     }
 
     public void store() throws IOException {
         Storage.storeMap(this);
     }
-    public void load() throws IOException, ClassNotFoundException {
-        Storage.loadMap(this);
-        if (table==null)this.createBlankTable();
+    public void load() throws ClassNotFoundException {
+        try {
+            Storage.loadMap(this);
+        }catch (FileNotFoundException ignored){
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (m.table==null)this.createBlankTable();
     }
 
 
@@ -77,20 +79,23 @@ public class WatchMessaging {
 
 
     public String getTableJSON(){
-        return new Gson().toJson(table);
+        return new Gson().toJson(m.table);
     }
 
     public void setTableJSON(String json){
-        table=new Gson().fromJson(json,Hashtable.class);
+        m.table=new Gson().fromJson(json,Hashtable.class);
     }
 
 
 
     public void putObject(ITEMS itemName, Object itemValue) {
+        if (m.table.values().contains(itemName)){
+            m.table.remove(itemName);
+        }
         if (! itemValue.getClass().getName().equals(Message.getClassOfItem(itemName).getName())){
             throw new ClassCastException("itemName was "+ Message.getClassOfItem(itemName).getName() +" but the value passed in was "+itemValue.getClass().getName());
         }
-        table.put(itemName, itemValue);
+        m.table.put(itemName, itemValue);
     }
 
     /**
@@ -102,10 +107,10 @@ public class WatchMessaging {
     public <T>T getObject(ITEMS i, Class<T> c){
 
         try {
-            Object o=table.get(i);
+            Object o=m.table.get(i);
 
             if (o==null||o.hashCode()==0){
-                 o=table.get(i.name());
+                 o=m.table.get(i.name());
                 if (o==null||o.hashCode()==0) {
                     return null;
                 }

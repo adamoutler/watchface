@@ -30,10 +30,9 @@ import android.widget.TextView;
 import com.casual_dev.CASUALWatch.R;
 import com.casual_dev.CASUALWatch.widget.MyTextView;
 import com.casual_dev.CASUALWatch.widget.WatchFaceLifecycle;
-import com.casual_dev.mobilewearmessaging.Message;
-import com.casual_dev.mobilewearmessaging.WatchMessaging;
+import com.casual_dev.casualmessager.Message;
+import com.casual_dev.casualmessager.WatchMessaging;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -161,9 +160,6 @@ public class DigitalWatchfaceActivity extends Activity implements WatchFaceLifec
         WatchMessaging wm=new WatchMessaging(getFilesDir().getAbsolutePath());
         try {
             wm.load();
-        } catch (IOException e) {
-            e.printStackTrace();
-
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }

@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/casualmessager/casualmessager.iml" filepath="$PROJECT_DIR$/casualmessager/casualmessager.iml" />
       <module fileurl="file://$PROJECT_DIR$/casualwear.iml" filepath="$PROJECT_DIR$/casualwear.iml" />
-      <module fileurl="file://$PROJECT_DIR$/libcasualshareddataencoding/libcasualshareddataencoding.iml" filepath="$PROJECT_DIR$/libcasualshareddataencoding/libcasualshareddataencoding.iml" />
       <module fileurl="file://$PROJECT_DIR$/submodules/watchface-gears/library/library.iml" filepath="$PROJECT_DIR$/submodules/watchface-gears/library/library.iml" />
       <module fileurl="file://$PROJECT_DIR$/mobile/mobile.iml" filepath="$PROJECT_DIR$/mobile/mobile.iml" />
       <module fileurl="file://$PROJECT_DIR$/watchface.iml" filepath="$PROJECT_DIR$/watchface.iml" />

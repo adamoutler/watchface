@@ -16,14 +16,17 @@ package com.casual_dev.CASUALWatch; /**
 
 
 import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 
-import com.casual_dev.mobilewearmessaging.WatchMessaging;
+import com.casual_dev.casualmessager.WatchMessaging;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.wearable.DataApi;
@@ -33,18 +36,20 @@ import com.google.android.gms.wearable.PutDataMapRequest;
 import com.google.android.gms.wearable.PutDataRequest;
 import com.google.android.gms.wearable.Wearable;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
-import static com.casual_dev.mobilewearmessaging.Message.ITEMS;
+import static com.casual_dev.casualmessager.Message.ITEMS;
 
 
 public class MainActivity extends Activity implements GoogleApiClient.ConnectionCallbacks {
     private static final String TAG = "CASUALMainActivity";
     Button sendText;
+    ImageView backgroundImage;
     EditText topText;
     EditText bottomText;
-    WearMessenger wm;
+    WatchMessaging mo;
     ProgressBar pb;
     //Uri backgroundURI;
 
@@ -54,7 +59,7 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mainactivity);
-        wm = new WearMessenger(getFilesDir().getAbsolutePath());
+        mo = new WatchMessaging(getFilesDir().getAbsolutePath());
 
 
         setWidgets();
@@ -82,31 +87,18 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
     }
 
     private void setWidgets() {
-        sendText = (Button) findViewById(R.id.sendtext);
         bottomText = (EditText) findViewById(R.id.userMessage2);
         topText = (EditText) findViewById(R.id.userMessage);
         pb=(ProgressBar) findViewById(R.id.progressBar);
-        final WatchMessaging mo = wm.getComms();
-
         topText.setText(mo.getObject(ITEMS.TOPTEXTTAG, String.class));
         bottomText.setText(mo.getObject(ITEMS.BOTTOMTEXTTAG, String.class));
         pb.setProgress(0);
         pb.setVisibility(View.GONE);
-
+        findViewById(R.id.backgroundpreview).setOnClickListener(handler);
+        findViewById(R.id.sendtext).setOnClickListener(handler);
         Log.d(TAG, "text:" + mo.getObject(ITEMS.TOPTEXTTAG, String.class));
-        sendText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                pb.setProgress(-1);
-                pb.setVisibility(View.VISIBLE);
-                Log.d(TAG, "Sending:"+ topText.getText().toString() +" and "+ bottomText.getText().toString());
+        backgroundImage=(ImageView) findViewById(R.id.backgroundpreview);
 
-                mo.putObject(ITEMS.BOTTOMTEXTTAG, bottomText.getText().toString());
-                mo.putObject(ITEMS.TOPTEXTTAG, topText.getText().toString());
-                sendAction().start();
-
-            }
-        });
     }
 
     public PutDataRequest encodeDataRequest(WatchMessaging mo) {
@@ -125,7 +117,7 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
         return new Thread(new Runnable() {
             @Override
             public void run() {
-                PendingResult<DataApi.DataItemResult> pendingResult = Wearable.DataApi.putDataItem(mApiClient, encodeDataRequest(wm.getComms()));
+                PendingResult<DataApi.DataItemResult> pendingResult = Wearable.DataApi.putDataItem(mApiClient, encodeDataRequest(mo));
                 DataApi.DataItemResult dr=pendingResult.await();
                 DataItem di= dr.getDataItem();
                 Log.d(TAG,"DATA ITEM. Listing data items.");
@@ -138,7 +130,7 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
                 }
                 Log.d(TAG,"DATA ITEM"+di.toString());
                 try {
-                    wm.getComms().store(); //store the data
+                    mo.store(); //store the data
                     runOnUiThread(  //for setting the progress bar
                             new Runnable() {
                                 @Override
@@ -156,8 +148,50 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
             }
         });
     }
+    View.OnClickListener handler = new View.OnClickListener(){
+        public void onClick(View v) {
+
+            switch (v.getId()) {
+
+                case R.id.sendtext:
+                    pb.setProgress(-1);
+                    pb.setVisibility(View.VISIBLE);
+                    Log.d(TAG, "Sending:"+ topText.getText().toString() +" and "+ bottomText.getText().toString());
+
+                    mo.putObject(ITEMS.BOTTOMTEXTTAG, bottomText.getText().toString());
+                    mo.putObject(ITEMS.TOPTEXTTAG, topText.getText().toString());
+                    sendAction().start();
+                    break;
+                case R.id.backgroundpreview:
+                    // doStuff
+                    Intent intent=new Intent(MainActivity.this, ImageGrabber.class);
+                    Bundle bundle = new Bundle();
+                    Uri uri=Uri.parse(new File(getFilesDir(),"tempFile").getAbsolutePath());
+
+                    intent.setDataAndType(uri,"image/*");
+
+                    MainActivity.this.startActivityForResult(intent, 0, bundle);
 
 
+                    break;
+            }
+        }
+    };
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        if (requestCode == 1 && data != null)
+        {
+            Log.v("TAG", data.getStringExtra("Note"));
+            if(resultCode == RESULT_OK)
+            {
+                Log.d(TAG,"result given");
+            }
+            if (resultCode == RESULT_CANCELED)
+            {
+
+            }
+        }
+    }
 
     @Override
     protected void onDestroy() {

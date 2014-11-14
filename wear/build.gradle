@@ -71,12 +71,19 @@ android {
             renderscriptDebugBuild true
         }
     }
+    sourceSets {
+        main {
+            manifest.srcFile 'src/main/AndroidManifest.xml'
+            java.srcDirs = ['src/main/java']
+            res.srcDirs = ['src/main/res', 'abs-res', 'he-res']
+        }
+    }
 }
 
 dependencies {
     compile project(':submodules:watchface-gears:library')
-    compile project(':libcasualshareddataencoding')
     compile 'com.jakewharton:butterknife:5.1.+'
     compile 'com.jakewharton.timber:timber:2.4.+'
+    compile project(':casualmessager')
 }
 

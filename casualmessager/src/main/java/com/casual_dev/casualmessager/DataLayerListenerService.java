@@ -1,12 +1,8 @@
-package com.casual_dev.CASUALWatch.service;
+package com.casual_dev.casualmessager;
 
 import android.net.Uri;
 import android.util.Log;
 
-import com.casual_dev.CASUALWatch.analog.AnalogWatchfaceActivity;
-import com.casual_dev.CASUALWatch.digital.DigitalWatchfaceActivity;
-import com.casual_dev.mobilewearmessaging.Message;
-import com.casual_dev.mobilewearmessaging.WatchMessaging;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.data.FreezableUtils;
@@ -19,8 +15,6 @@ import com.google.android.gms.wearable.WearableListenerService;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-
-import static com.casual_dev.mobilewearmessaging.Message.ITEMS;
 
 /**
  * Created by adamoutler on 11/3/14.
@@ -83,7 +77,8 @@ public class DataLayerListenerService extends WearableListenerService {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
+                MessageNotifier.newMessage(delivery);
+/*
                 Log.d(TAG, "top text " + delivery.getObject(ITEMS.TOPTEXTTAG, String.class));
                 if (DigitalWatchfaceActivity.getInstance() != null) {
                     DigitalWatchfaceActivity da=DigitalWatchfaceActivity.getInstance();
@@ -98,15 +93,14 @@ public class DataLayerListenerService extends WearableListenerService {
             // Send the RPC
             Wearable.MessageApi.sendMessage(googleApiClient, nodeId,
                     DATA_ITEM_RECEIVED_PATH, payload);
-        }
-    }
-
-
+        }*/
+            }
+        }}
 
 
 
     private void updateDigitalWatchFaceText(final WatchMessaging delivery) {
-        DigitalWatchfaceActivity.
+/*        DigitalWatchfaceActivity.
                 getInstance().
                 runOnUiThread(
                         new Runnable() {
@@ -134,12 +128,16 @@ public class DataLayerListenerService extends WearableListenerService {
                 }
 
         );
+    }*/
     }
-    public WatchMessaging decodeDataRequest(DataMapItem delivery, WatchMessaging mo) {
-        if (null != delivery.getDataMap().getString(mo.TABLENAME)) mo.setTableJSON(delivery.getDataMap().getString(mo.TABLENAME));
+     WatchMessaging decodeDataRequest(DataMapItem delivery, WatchMessaging mo) {
+        if (null != delivery.getDataMap().getString(mo.TABLENAME)){
+            mo.setTableJSON(delivery.getDataMap().getString(mo.TABLENAME));
+        }
         for (Message.ITEMS i: Message.ITEMS.values()){
             Log.d(TAG,"item:"+i.name()+" value:"+mo.getObject(i,String.class));
         }
         return mo;
-    }
+
+        }
 }

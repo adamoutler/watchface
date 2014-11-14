@@ -23,7 +23,7 @@ import java.util.Random;
   *Created by adamoutler on 11/1/14.
  */
 
-public class DigitalWatchfaceActions extends DigitalWatchfaceActivity {
+public class DigitalWatchfaceActions extends DigitalWatchfaceActivity  {
 
     private static String[] words = new String[]{"ELOPMENT", "EVOURING", "OUTSNESS", "ISTATION", "OTEDNESS", "ELISHNESS"};
 
