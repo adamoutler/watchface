@@ -107,13 +107,13 @@ public class AnalogWatchfaceActivity extends GearsWatchfaceActivity implements W
 
 
     @Override
-    public void onMessageReceived(final WatchMessaging message) {
+    public void onMessageReceived(final Message message) {
         runOnUiThread(new Runnable() {
 
             @Override
             public void run() {
-                mCASUAL.setText(message.getObject(Message.ITEMS.TOPTEXTTAG, String.class));
-                mDev.setText(message.getObject(Message.ITEMS.BOTTOMTEXTTAG, String.class));
+                mCASUAL.setText(message.get(Message.ITEMS.TOPTEXTTAG, String.class));
+                mDev.setText(message.get(Message.ITEMS.BOTTOMTEXTTAG, String.class));
 
             }
         });

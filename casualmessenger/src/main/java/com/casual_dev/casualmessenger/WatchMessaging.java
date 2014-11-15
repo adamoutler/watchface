@@ -4,25 +4,27 @@ package com.casual_dev.casualmessenger;
 import android.content.Context;
 import android.util.Log;
 
+import com.casual_dev.casualmessenger.Serialization.Json;
+import com.casual_dev.casualmessenger.Serialization.Serializer;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.wearable.Asset;
 import com.google.android.gms.wearable.DataApi;
 import com.google.android.gms.wearable.DataItem;
 import com.google.android.gms.wearable.DataItemAsset;
 import com.google.android.gms.wearable.PutDataMapRequest;
 import com.google.android.gms.wearable.PutDataRequest;
 import com.google.android.gms.wearable.Wearable;
-import com.google.gson.Gson;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Hashtable;
 import java.util.Map;
 
 import static com.casual_dev.casualmessenger.Message.ITEMS;
-
-;
 
 
 /**
@@ -50,9 +52,9 @@ public class WatchMessaging {
         }
     }
 
-    public static Hashtable<ITEMS, Object> getTableJson(String tableJson) {
-        Gson gson = new Gson();
-        return (Hashtable<ITEMS, Object>) gson.fromJson(tableJson, Hashtable.class);
+    @SuppressWarnings("unused")
+    public static Message getTableJson(String tableJson) {
+        return Json.decode(tableJson);
     }
 
     public static String getMessageDataPath() {
@@ -95,23 +97,66 @@ public class WatchMessaging {
     }
 
     public String getTableJSON() {
-        return new Gson().toJson(m);
+        return Json.encode(m);
     }
 
-    public void setTableJSON(String json) {
-        m = new Gson().fromJson(json, Message.class);
+    public void setTableAsset(InputStream is) {
+
+        Message message = new Message();
+
+        try {
+            byte[] b = convertInputStreamToByteArray(is);
+            message = (Message) Serializer.deserialize(b);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        for (ITEMS i : message.keySet()) {
+            Object o = message.get(i);
+            if (!o.equals("")) {
+                m.put(i, o);
+            }
+        }
+
     }
 
+    public byte[] convertInputStreamToByteArray(InputStream inputStream) {
+        byte[] bytes = null;
+
+        try {
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+
+            byte data[] = new byte[1024];
+            int count;
+
+            while ((count = inputStream.read(data)) != -1) {
+                bos.write(data, 0, count);
+            }
+
+            bos.flush();
+            bos.close();
+            inputStream.close();
+
+            bytes = bos.toByteArray();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return bytes;
+    }
     public <T> T getObject(ITEMS i, Class<T> c) {
-        return m.getObject(i, c);
+        return m.get(i, c);
     }
 
+    @SuppressWarnings("unused")
     public void setObject(ITEMS i, Object o) {
         m.putObject(i, o);
     }
 
 
-    public Thread send(final Context c, final WatchMessaging watchMessaging, final Runnable onFinished) {
+    public Thread send(final Context c, final Message message, final Runnable onFinished) {
 
         return new Thread(new Runnable() {
             @Override
@@ -121,14 +166,12 @@ public class WatchMessaging {
                         .build();
 
                 apiClient.connect();
-                PendingResult<DataApi.DataItemResult> pendingResult = Wearable.DataApi.putDataItem(apiClient, encodeDataRequest(watchMessaging));
+                PendingResult<DataApi.DataItemResult> pendingResult = Wearable.DataApi.putDataItem(apiClient, encodeDataRequest(message));
                 DataApi.DataItemResult dr = pendingResult.await();
                 DataItem di = dr.getDataItem();
                 Log.d(TAG, "DATA ITEM. Listing data items.");
                 Map<String, DataItemAsset> m = di.getAssets();
-
-
-                for (String item : m.keySet()) {
+                for (Message.ITEMS item : message.keySet()) {
 
                     Log.d(TAG, "DATA ITEM" + item + "value:" + m.get(item));
                 }
@@ -140,10 +183,20 @@ public class WatchMessaging {
         });
     }
 
-    public PutDataRequest encodeDataRequest(WatchMessaging mo) {
+    public PutDataRequest encodeDataRequest(Message message) {
         PutDataMapRequest dataMap = PutDataMapRequest.create(WatchMessaging.getMessageDataPath());
-        dataMap.getDataMap().putString(WatchMessaging.TABLENAME, mo.getTableJSON());
-        Log.d(TAG, "Table" + dataMap.getDataMap().get(WatchMessaging.TABLENAME));
+        try {
+            dataMap.getDataMap().putAsset(WatchMessaging.TABLENAME, Asset.createFromBytes(Serializer.serialize(message)));
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (ITEMS i : message.keySet()) {
+            sb.append("Item:").append(i).append(" Value:").append(message.get(i)).append("\n");
+        }
+        Log.d(TAG, "sending message" + sb.toString());
         return dataMap.asPutDataRequest();
     }
 

@@ -14,11 +14,12 @@ package com.casual_dev.CASUALWatch.digital;
         limitations under the License.
 */
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 
 import com.casual_dev.casualmessenger.Message;
-import com.casual_dev.casualmessenger.WatchMessaging;
+import com.casual_dev.casualmessenger.Serialization.SerializableImage;
 import com.casual_dev.casualmessenger.observer.MessageObserver;
 
 public class DigitalWatchfaceApp extends DigitalWatchfaceActions implements MessageObserver.MessageInterface {
@@ -29,14 +30,30 @@ public class DigitalWatchfaceApp extends DigitalWatchfaceActions implements Mess
     }
 
     @Override
-    public void onMessageReceived(final WatchMessaging message) {
+    public void onMessageReceived(final Message message) {
         Log.d("CASUALWEAR", message.toString());
 
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                setPrimaryText(message.getObject(Message.ITEMS.TOPTEXTTAG, String.class));
-                setSecondaryText(message.getObject(Message.ITEMS.BOTTOMTEXTTAG, String.class));
+                for (Message.ITEMS i : message.keySet()) {
+                    switch (i) {
+                        case TOPTEXTTAG:
+                            setPrimaryText(message.get(Message.ITEMS.TOPTEXTTAG, String.class));
+                            break;
+                        case BOTTOMTEXTTAG:
+                            setSecondaryText(message.get(Message.ITEMS.BOTTOMTEXTTAG, String.class));
+                            break;
+                        case BACKGROUNDIMAGE:
+                            SerializableImage si = message.get(Message.ITEMS.BACKGROUNDIMAGE, SerializableImage.class);
+                            Bitmap bitmap = si.getImage();
+
+                            mBackLogo.setImageBitmap(bitmap);
+                            break;
+                        default:
+                            break;
+                    }
+                }
             }
         });
     }

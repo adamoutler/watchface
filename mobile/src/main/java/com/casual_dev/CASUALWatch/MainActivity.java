@@ -30,10 +30,10 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.casual_dev.casualmessenger.Message;
+import com.casual_dev.casualmessenger.Serialization.SerializableImage;
 import com.casual_dev.casualmessenger.WatchMessaging;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.wearable.PutDataMapRequest;
-import com.google.android.gms.wearable.PutDataRequest;
 
 import java.io.File;
 
@@ -74,6 +74,34 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
             }
         }
     };
+    TextWatcher tw = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            sendText();
+        }
+    };
+    Runnable uiThreadStopProgressSpinning = new Runnable() {
+        @Override
+        public void run() {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    pb.setProgress(0);
+                    pb.setVisibility(View.GONE);
+
+                }
+            });
+
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -110,29 +138,8 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
         findViewById(R.id.sendtext).setOnClickListener(handler);
         Log.d(TAG, "text:" + watchMessaging.getObject(ITEMS.TOPTEXTTAG, String.class));
         backgroundImage = (ImageView) findViewById(R.id.backgroundpreview);
-        topText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                sendText();
-            }
-        });
-    }
-
-    public PutDataRequest encodeDataRequest(WatchMessaging mo) {
-        PutDataMapRequest dataMap = PutDataMapRequest.create(WatchMessaging.getMessageDataPath());
-        dataMap.getDataMap().putString(WatchMessaging.TABLENAME, mo.getTableJSON());
-        Log.d(TAG, "Table" + dataMap.getDataMap().get(WatchMessaging.TABLENAME));
-        return dataMap.asPutDataRequest();
+        topText.addTextChangedListener(tw);
+        bottomText.addTextChangedListener(tw);
     }
 
     @Override
@@ -140,41 +147,42 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
 
     }
 
-    Thread sendAction() {
-        return watchMessaging.send(this.getApplicationContext(), watchMessaging,
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                pb.setProgress(0);
-                                pb.setVisibility(View.GONE);
-
-                            }
-                        });
-
-                    }
-                });
-
-
+    Thread sendAction(Message m) {
+        return watchMessaging.send(this.getApplicationContext(), m, uiThreadStopProgressSpinning);
     }
 
-    void sendText() {
+    private void startProgressSpinning() {
         pb.setProgress(-1);
         pb.setVisibility(View.VISIBLE);
+    }
+
+
+    void sendText() {
+        startProgressSpinning();
         Log.d(TAG, "Sending:" + topText.getText().toString() + " and " + bottomText.getText().toString());
 
-        watchMessaging.setObject(ITEMS.BOTTOMTEXTTAG, bottomText.getText().toString());
-        watchMessaging.setObject(ITEMS.TOPTEXTTAG, topText.getText().toString());
-        sendAction().start();
+        Message message = new Message();
+        message.putObject(ITEMS.BOTTOMTEXTTAG, bottomText.getText().toString());
+        message.put(ITEMS.TOPTEXTTAG, topText.getText().toString());
+        sendAction(message).start();
     }
+
+    void sendBackground(Bitmap bmp) {
+        startProgressSpinning();
+        Log.d(TAG, "Sending background image");
+        Message message = new Message();
+        SerializableImage so = new SerializableImage(bmp);
+        message.putObject(ITEMS.BACKGROUNDIMAGE, so);
+        sendAction(message).start();
+    }
+
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
-            backgroundImage.setImageBitmap((Bitmap) data.getExtras().get("image"));
+            Bitmap bmp = ((Bitmap) data.getExtras().get("image"));
+            backgroundImage.setImageBitmap(bmp);
 
-            Log.d(TAG, "result given");
+            sendBackground(bmp);
         }
         if (resultCode == RESULT_CANCELED) {
 

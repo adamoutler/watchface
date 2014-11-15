@@ -1,6 +1,6 @@
 package com.casual_dev.casualmessenger;
 
-import android.graphics.Bitmap;
+import com.casual_dev.casualmessenger.Serialization.SerializableImage;
 
 import java.util.Hashtable;
 
@@ -8,15 +8,16 @@ import java.util.Hashtable;
  * Created by adamoutler on 11/10/14.
  */
 public class Message extends Hashtable<Message.ITEMS, Object> {
-
     /**
      * gets an object fom the table
      *
      * @param i item to fetch
-     * @return
+     * @param c used for type casting
+     * @return Object corresponding to Item, casted as i.type()
      */
-    public <T> T getObject(ITEMS i, Class<T> c) {
 
+    @SuppressWarnings("unchecked unused")  //very well checked, thanks Android Studio
+    public <T> T get(ITEMS i, Class<T> c) {
         Class expectedClass = i.type();
         Object actualObject = get(i);
         try {
@@ -39,22 +40,32 @@ public class Message extends Hashtable<Message.ITEMS, Object> {
 
     }
 
-    public void putObject(ITEMS itemName, Object itemValue) {
+    public Object putObject(ITEMS itemName, Object itemValue) {
         if (values().contains(itemName)) {
             remove(itemName);
         }
         if (!itemValue.getClass().getName().equals(itemName.type().getName())) {
             throw new ClassCastException("itemName was " + itemName.type().getName() + " but the value passed in was " + itemValue.getClass().getName());
         }
-        put(itemName, itemValue);
+        return put(itemName, itemValue);
     }
 
     private boolean nullTest(Object o) {
         return o == null || o.hashCode() == 0;
     }
 
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (ITEMS i : this.keySet()) {
+            sb.append("Item:").append(i).append(" Value:").append(get(i));
+        }
+        return sb.toString();
+    }
+
+
     public enum ITEMS {
-        BACKGROUNDIMAGE(Bitmap.class),
+        BACKGROUNDIMAGE(SerializableImage.class),
         BOTTOMTEXTTAG(String.class),
         TOPTEXTTAG(String.class);
 
@@ -68,5 +79,4 @@ public class Message extends Hashtable<Message.ITEMS, Object> {
             return myClass;
         }
     }
-
 }

@@ -5,9 +5,7 @@ package com.casual_dev.CASUALWatch;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -17,6 +15,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import java.io.File;
+import java.io.IOException;
 
 public class ImageGrabber extends Activity {
     final static String TAG = "ImageGrabber";
@@ -54,10 +53,12 @@ public class ImageGrabber extends Activity {
                 intent.setAction(Intent.ACTION_GET_CONTENT);
 // ******** code for crop image
                 intent.putExtra("crop", "true");
-                intent.putExtra("aspectX", 0);
-                intent.putExtra("aspectY", 0);
-                intent.putExtra("outputX", 200);
-                intent.putExtra("outputY", 150);
+                intent.putExtra("aspectX", 1);
+                intent.putExtra("aspectY", 1);
+                intent.putExtra("outputX", 400);
+                intent.putExtra("outputY", 400);
+                intent.putExtra("noFaceDetection", true);
+                intent.putExtra("return-data", true);
 
                 try {
 
@@ -77,25 +78,20 @@ public class ImageGrabber extends Activity {
 
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
-            i.putExtra("image", (Bitmap) extras.get("data"));
+            i.putExtra("image", Bitmap.createScaledBitmap((Bitmap) extras.get("data"), 300, 300, false));
             setResult(Activity.RESULT_OK, i);
-            Log.d(TAG, "got image");
+            Log.d(TAG, "got images");
             finish();
         }
         if (requestCode == PICK_FROM_GALLERY && resultCode == RESULT_OK) {
-            Uri imageUri = data.getData();
-            Uri selectedImage = intent.getData();
-            String[] filePathColumn = {MediaStore.Images.Media.DATA};
-
-            Cursor cursor = getContentResolver().query(
-                    selectedImage, filePathColumn, null, null, null);
-            cursor.moveToFirst();
-
-            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-            String filePath = cursor.getString(columnIndex);
-            cursor.close();
-            Bitmap yourSelectedImage = BitmapFactory.decodeFile(filePath);
-            i.putExtra("image", yourSelectedImage);
+            Uri selectedImageUri = data.getData();
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImageUri);
+                i.putExtra("image", Bitmap.createScaledBitmap(bitmap, 300, 300, true));
+                setResult(Activity.RESULT_OK, i);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
             finish();
 
