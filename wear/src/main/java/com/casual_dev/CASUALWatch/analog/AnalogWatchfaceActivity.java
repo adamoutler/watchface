@@ -5,13 +5,13 @@ import android.widget.TextView;
 
 import com.casual_dev.CASUALWatch.R;
 import com.casual_dev.CASUALWatch.widget.WatchFaceLifecycle;
-import com.casual_dev.casualmessager.Message;
-import com.casual_dev.casualmessager.MessageNotifier;
-import com.casual_dev.casualmessager.WatchMessaging;
+import com.casual_dev.casualmessenger.Message;
+import com.casual_dev.casualmessenger.WatchMessaging;
+import com.casual_dev.casualmessenger.observer.MessageObserver;
 import com.twotoasters.watchface.gears.activity.GearsWatchfaceActivity;
 import com.twotoasters.watchface.gears.widget.IWatchface;
 
-public class AnalogWatchfaceActivity extends GearsWatchfaceActivity implements WatchFaceLifecycle.Listener, MessageNotifier.MessageInterface {
+public class AnalogWatchfaceActivity extends GearsWatchfaceActivity implements WatchFaceLifecycle.Listener, MessageObserver.MessageInterface {
 
     static AnalogWatchfaceActivity instance;
 
@@ -39,7 +39,7 @@ public class AnalogWatchfaceActivity extends GearsWatchfaceActivity implements W
         super.onCreate(saved);
         instance = this;
         setWidgets();
-        MessageNotifier.connect(this);
+        MessageObserver.connect(this);
 
     }
 
@@ -85,7 +85,7 @@ public class AnalogWatchfaceActivity extends GearsWatchfaceActivity implements W
 
     public void setDataItems(WatchMessaging wm) {
         setPrimaryText(wm.getObject(Message.ITEMS.TOPTEXTTAG, String.class));
-        setSecondaryText((wm.getObject(Message.ITEMS.BOTTOMTEXTTAG, String.class)));
+        setSecondaryText((String) wm.getObject(Message.ITEMS.BOTTOMTEXTTAG, String.class));
     }
 
     public void setPrimaryText(String s) {

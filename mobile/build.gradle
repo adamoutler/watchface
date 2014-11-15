@@ -65,7 +65,7 @@ dependencies {
     compile 'com.android.support:support-v4:20.0.+'
     wearApp project(':wear')
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile (project(':casualmessager')) {
+    compile(project(':casualmessenger')) {
         transitive = false
     }
 }

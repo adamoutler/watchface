@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion Integer.parseInt(ANDROID_BUILD_MIN_SDK_VERSION)
+    compileSdkVersion 18
     buildToolsVersion ANDROID_BUILD_TOOLS_VERSION
 
     defaultConfig {
@@ -12,7 +12,7 @@ android {
 
         versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild
         versionName "${versionMajor}.${versionMinor}.${versionPatch}.${versionBuild}"
-        applicationId "com.casual_dev.casualmessager"
+        applicationId "com.casual_dev.casualmessenger"
         targetSdkVersion 21
     }
     buildTypes {

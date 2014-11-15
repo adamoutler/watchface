@@ -30,8 +30,8 @@ import android.widget.TextView;
 import com.casual_dev.CASUALWatch.R;
 import com.casual_dev.CASUALWatch.widget.MyTextView;
 import com.casual_dev.CASUALWatch.widget.WatchFaceLifecycle;
-import com.casual_dev.casualmessager.Message;
-import com.casual_dev.casualmessager.WatchMessaging;
+import com.casual_dev.casualmessenger.Message;
+import com.casual_dev.casualmessenger.WatchMessaging;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -157,7 +157,7 @@ public class DigitalWatchfaceActivity extends Activity implements WatchFaceLifec
         mCasual = (TextView) findViewById(R.id.LogoText);
         mCasualDim = (TextView) findViewById(R.id.LogoTextDim);
         mBackLogo = (ImageView) findViewById(R.id.logo);
-        WatchMessaging wm=new WatchMessaging(getFilesDir().getAbsolutePath());
+        WatchMessaging wm = new WatchMessaging(getFilesDir().getAbsolutePath());
         try {
             wm.load();
         } catch (ClassNotFoundException e) {
@@ -208,15 +208,15 @@ public class DigitalWatchfaceActivity extends Activity implements WatchFaceLifec
     }
 
 
-    public void setDataItems(WatchMessaging wm){
+    public void setDataItems(WatchMessaging wm) {
         setPrimaryText(wm.getObject(Message.ITEMS.TOPTEXTTAG, String.class));
-        setSecondaryText((wm.getObject( Message.ITEMS.BOTTOMTEXTTAG, String.class)));
+        setSecondaryText(wm.getObject(Message.ITEMS.BOTTOMTEXTTAG, String.class));
     }
 
 
     public void setPrimaryText(String s) {
         ;
-        if (null==s||s.isEmpty()) {
+        if (null == s || s.isEmpty()) {
             s = "CASUAL";
         }
         mCasual.setText(s);
@@ -225,7 +225,7 @@ public class DigitalWatchfaceActivity extends Activity implements WatchFaceLifec
 
     public void setSecondaryText(String s) {
 
-        if (null==s||s.isEmpty()) {
+        if (null == s || s.isEmpty()) {
             s = "DEV";
         }
         mDev.setText(s);

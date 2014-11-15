@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="play-services-wearable-6.1.71">
     <CLASSES>
-      <root url="file://$PROJECT_DIR$/casualmessager/build/intermediates/exploded-aar/com.google.android.gms/play-services-wearable/6.1.71/res" />
-      <root url="jar://$PROJECT_DIR$/casualmessager/build/intermediates/exploded-aar/com.google.android.gms/play-services-wearable/6.1.71/classes.jar!/" />
+      <root url="jar://$PROJECT_DIR$/casualmessenger/build/intermediates/exploded-aar/com.google.android.gms/play-services-wearable/6.1.71/classes.jar!/" />
+      <root url="file://$PROJECT_DIR$/casualmessenger/build/intermediates/exploded-aar/com.google.android.gms/play-services-wearable/6.1.71/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

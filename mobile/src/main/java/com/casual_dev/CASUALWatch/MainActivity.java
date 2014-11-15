@@ -17,30 +17,27 @@ package com.casual_dev.CASUALWatch; /**
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
-import com.casual_dev.casualmessager.WatchMessaging;
+import com.casual_dev.casualmessenger.WatchMessaging;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.wearable.DataApi;
-import com.google.android.gms.wearable.DataItem;
-import com.google.android.gms.wearable.DataItemAsset;
 import com.google.android.gms.wearable.PutDataMapRequest;
 import com.google.android.gms.wearable.PutDataRequest;
-import com.google.android.gms.wearable.Wearable;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.Map;
 
-import static com.casual_dev.casualmessager.Message.ITEMS;
+import static com.casual_dev.casualmessenger.Message.ITEMS;
 
 
 public class MainActivity extends Activity implements GoogleApiClient.ConnectionCallbacks {
@@ -49,17 +46,40 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
     ImageView backgroundImage;
     EditText topText;
     EditText bottomText;
-    WatchMessaging mo;
+    TextView mDefault;
+    WatchMessaging watchMessaging;
     ProgressBar pb;
     //Uri backgroundURI;
+    View.OnClickListener handler = new View.OnClickListener() {
 
-    GoogleApiClient mApiClient;
+        public void onClick(View v) {
+
+            switch (v.getId()) {
+
+                case R.id.sendtext:
+                    sendText();
+                    break;
+                case R.id.backgroundpreview:
+                    // doStuff
+                    Intent intent = new Intent(MainActivity.this, ImageGrabber.class);
+                    Bundle bundle = new Bundle();
+                    Uri uri = Uri.parse(new File(getFilesDir(), "tempFile").getAbsolutePath());
+
+                    intent.setDataAndType(uri, "image/*");
+
+                    MainActivity.this.startActivityForResult(intent, 0, bundle);
+
+
+                    break;
+            }
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mainactivity);
-        mo = new WatchMessaging(getFilesDir().getAbsolutePath());
+        watchMessaging = new WatchMessaging(getFilesDir().getAbsolutePath());
 
 
         setWidgets();
@@ -69,16 +89,8 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
     @Override
     protected void onResume() {
         super.onResume();
-        initGoogleApiClient();
 
-    }
 
-    private void initGoogleApiClient() {
-        mApiClient = new GoogleApiClient.Builder(this)
-                .addApi(Wearable.API)
-                .build();
-
-        mApiClient.connect();
     }
 
     @Override
@@ -89,16 +101,31 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
     private void setWidgets() {
         bottomText = (EditText) findViewById(R.id.userMessage2);
         topText = (EditText) findViewById(R.id.userMessage);
-        pb=(ProgressBar) findViewById(R.id.progressBar);
-        topText.setText(mo.getObject(ITEMS.TOPTEXTTAG, String.class));
-        bottomText.setText(mo.getObject(ITEMS.BOTTOMTEXTTAG, String.class));
+        pb = (ProgressBar) findViewById(R.id.progressBar);
+        topText.setText(watchMessaging.getObject(ITEMS.TOPTEXTTAG, String.class));
+        bottomText.setText(watchMessaging.getObject(ITEMS.BOTTOMTEXTTAG, String.class));
         pb.setProgress(0);
         pb.setVisibility(View.GONE);
         findViewById(R.id.backgroundpreview).setOnClickListener(handler);
         findViewById(R.id.sendtext).setOnClickListener(handler);
-        Log.d(TAG, "text:" + mo.getObject(ITEMS.TOPTEXTTAG, String.class));
-        backgroundImage=(ImageView) findViewById(R.id.backgroundpreview);
+        Log.d(TAG, "text:" + watchMessaging.getObject(ITEMS.TOPTEXTTAG, String.class));
+        backgroundImage = (ImageView) findViewById(R.id.backgroundpreview);
+        topText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                sendText();
+            }
+        });
     }
 
     public PutDataRequest encodeDataRequest(WatchMessaging mo) {
@@ -113,84 +140,46 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
 
     }
 
-    Thread sendAction(){
-        return new Thread(new Runnable() {
-            @Override
-            public void run() {
-                PendingResult<DataApi.DataItemResult> pendingResult = Wearable.DataApi.putDataItem(mApiClient, encodeDataRequest(mo));
-                DataApi.DataItemResult dr=pendingResult.await();
-                DataItem di= dr.getDataItem();
-                Log.d(TAG,"DATA ITEM. Listing data items.");
-                Map<String, DataItemAsset> m=di.getAssets();
+    Thread sendAction() {
+        return watchMessaging.send(this.getApplicationContext(), watchMessaging,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                pb.setProgress(0);
+                                pb.setVisibility(View.GONE);
+
+                            }
+                        });
+
+                    }
+                });
 
 
-                for (String item: m.keySet()){
-
-                    Log.d(TAG,"DATA ITEM"+item +"value:"+m.get(item));
-                }
-                Log.d(TAG,"DATA ITEM"+di.toString());
-                try {
-                    mo.store(); //store the data
-                    runOnUiThread(  //for setting the progress bar
-                            new Runnable() {
-                                @Override
-                                public void run() {
-                                    pb.setProgress(0);
-                                    pb.setVisibility(View.GONE);
-
-                                }
-                            });
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-
-            }
-        });
     }
-    View.OnClickListener handler = new View.OnClickListener(){
-        public void onClick(View v) {
 
-            switch (v.getId()) {
+    void sendText() {
+        pb.setProgress(-1);
+        pb.setVisibility(View.VISIBLE);
+        Log.d(TAG, "Sending:" + topText.getText().toString() + " and " + bottomText.getText().toString());
 
-                case R.id.sendtext:
-                    pb.setProgress(-1);
-                    pb.setVisibility(View.VISIBLE);
-                    Log.d(TAG, "Sending:"+ topText.getText().toString() +" and "+ bottomText.getText().toString());
+        watchMessaging.setObject(ITEMS.BOTTOMTEXTTAG, bottomText.getText().toString());
+        watchMessaging.setObject(ITEMS.TOPTEXTTAG, topText.getText().toString());
+        sendAction().start();
+    }
 
-                    mo.putObject(ITEMS.BOTTOMTEXTTAG, bottomText.getText().toString());
-                    mo.putObject(ITEMS.TOPTEXTTAG, topText.getText().toString());
-                    sendAction().start();
-                    break;
-                case R.id.backgroundpreview:
-                    // doStuff
-                    Intent intent=new Intent(MainActivity.this, ImageGrabber.class);
-                    Bundle bundle = new Bundle();
-                    Uri uri=Uri.parse(new File(getFilesDir(),"tempFile").getAbsolutePath());
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            backgroundImage.setImageBitmap((Bitmap) data.getExtras().get("image"));
 
-                    intent.setDataAndType(uri,"image/*");
-
-                    MainActivity.this.startActivityForResult(intent, 0, bundle);
-
-
-                    break;
-            }
+            Log.d(TAG, "result given");
         }
-    };
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
-        if (requestCode == 1 && data != null)
-        {
-            Log.v("TAG", data.getStringExtra("Note"));
-            if(resultCode == RESULT_OK)
-            {
-                Log.d(TAG,"result given");
-            }
-            if (resultCode == RESULT_CANCELED)
-            {
+        if (resultCode == RESULT_CANCELED) {
 
-            }
         }
+
     }
 
     @Override

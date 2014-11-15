@@ -8,7 +8,7 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/casualmessager" />
+            <option value="$PROJECT_DIR$/casualmessenger" />
             <option value="$PROJECT_DIR$/mobile" />
             <option value="$PROJECT_DIR$/submodules" />
             <option value="$PROJECT_DIR$/submodules/watchface-gears" />

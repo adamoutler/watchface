@@ -1,4 +1,4 @@
-package com.casual_dev.casualmessager;
+package com.casual_dev.casualmessenger;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -19,7 +19,7 @@ public class Storage {
 
     static Hashtable<Message.ITEMS, Object> loadMap(WatchMessaging watchMessaging) throws IOException, ClassNotFoundException {
         ObjectInputStream file = new ObjectInputStream(new FileInputStream(new File(watchMessaging.dataFolder, WatchMessaging.STORAGE)));
-        watchMessaging.setTable((Hashtable<Message.ITEMS,Object>) file.<Hashtable<Message.ITEMS,String>>readObject());
+        watchMessaging.setTable((Message) file.readObject());
         return watchMessaging.getTable();
     }
 }

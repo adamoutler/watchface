@@ -1,1 +1,1 @@
-include ':submodules:watchface-gears:library', ':wear', ':mobile', ':casualmessager'
+include ':submodules:watchface-gears:library', ':wear', ':mobile', ':casualmessenger'

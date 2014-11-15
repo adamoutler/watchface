@@ -5,7 +5,9 @@ package com.casual_dev.CASUALWatch;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -17,9 +19,12 @@ import android.widget.ImageView;
 import java.io.File;
 
 public class ImageGrabber extends Activity {
+    final static String TAG = "ImageGrabber";
+    static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int PICK_FROM_CAMERA = 1;
     private static final int PICK_FROM_GALLERY = 2;
     ImageView imgview;
+    Intent intent;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -66,18 +71,38 @@ public class ImageGrabber extends Activity {
             }
         });
     }
+
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Intent i = new Intent();
 
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            Log.d("got image", imageBitmap.toString());
+            i.putExtra("image", (Bitmap) extras.get("data"));
+            setResult(Activity.RESULT_OK, i);
+            Log.d(TAG, "got image");
+            finish();
+        }
+        if (requestCode == PICK_FROM_GALLERY && resultCode == RESULT_OK) {
+            Uri imageUri = data.getData();
+            Uri selectedImage = intent.getData();
+            String[] filePathColumn = {MediaStore.Images.Media.DATA};
+
+            Cursor cursor = getContentResolver().query(
+                    selectedImage, filePathColumn, null, null, null);
+            cursor.moveToFirst();
+
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            String filePath = cursor.getString(columnIndex);
+            cursor.close();
+            Bitmap yourSelectedImage = BitmapFactory.decodeFile(filePath);
+            i.putExtra("image", yourSelectedImage);
+
+            finish();
+
+
         }
 
     }
-
-
-    static final int REQUEST_IMAGE_CAPTURE = 1;
 
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);

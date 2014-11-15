@@ -1,4 +1,4 @@
-package com.casual_dev.casualmessager;
+package com.casual_dev.casualmessenger;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

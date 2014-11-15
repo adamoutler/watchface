@@ -17,20 +17,20 @@ package com.casual_dev.CASUALWatch.digital;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.casual_dev.casualmessager.Message;
-import com.casual_dev.casualmessager.MessageNotifier;
-import com.casual_dev.casualmessager.WatchMessaging;
+import com.casual_dev.casualmessenger.Message;
+import com.casual_dev.casualmessenger.WatchMessaging;
+import com.casual_dev.casualmessenger.observer.MessageObserver;
 
-public class DigitalWatchfaceApp extends DigitalWatchfaceActions implements MessageNotifier.MessageInterface {
+public class DigitalWatchfaceApp extends DigitalWatchfaceActions implements MessageObserver.MessageInterface {
     @Override
-    protected  void onCreate(Bundle b){
+    protected void onCreate(Bundle b) {
         super.onCreate(b);
-        MessageNotifier.connect(this);
+        MessageObserver.connect(this);
     }
 
     @Override
     public void onMessageReceived(final WatchMessaging message) {
-        Log.d("CASUALWEAR",message.toString());
+        Log.d("CASUALWEAR", message.toString());
 
         runOnUiThread(new Runnable() {
             @Override
