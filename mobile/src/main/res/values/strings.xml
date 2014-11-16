@@ -8,4 +8,7 @@
     <string name="message">The CASUALWear face should already be installed if you have an Android Wear device. You can use this view to customize the watch text</string>
     <string name="CASUALWear">CASUALWear</string>
     <string name="resetButtonText">reset</string>
+    <string name="imageGrabberPrompt">New Watch Background</string>
+    <string name="GalleryButtonText">Select from Gallery</string>
+    <string name="CameraButtonText">Take From Camera</string>
 </resources>

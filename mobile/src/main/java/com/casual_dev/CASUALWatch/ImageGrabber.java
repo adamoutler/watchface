@@ -12,25 +12,19 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 
 import java.io.File;
 import java.io.IOException;
 
 public class ImageGrabber extends Activity {
     final static String TAG = "ImageGrabber";
-    static final int REQUEST_IMAGE_CAPTURE = 1;
-    private static final int PICK_FROM_CAMERA = 1;
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int PICK_FROM_GALLERY = 2;
-    ImageView imgview;
-    Intent intent;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.image_grabber);
-
-        imgview = (ImageView) findViewById(R.id.imageView1);
         Button buttonCamera = (Button) findViewById(R.id.btn_take_camera);
         Button buttonGallery = (Button) findViewById(R.id.btn_select_gallery);
         buttonCamera.setOnClickListener(new View.OnClickListener() {

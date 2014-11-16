@@ -9,42 +9,30 @@
         android:id="@+id/textViewAddCard"
         android:layout_width="250dp"
         android:layout_height="50dp"
-        android:text="Take Image"
-        android:textSize="16dp"
         android:layout_gravity="center"
         android:gravity="center"
+        android:text="@string/imageGrabberPrompt"
+        android:textSize="16sp"
         android:typeface="sans"/>
 
     <Button
         android:id="@+id/btn_take_camera"
         android:layout_width="250dp"
         android:layout_height="50dp"
-        android:text="Take From Camera"
-        android:layout_marginTop="5dp"
         android:layout_gravity="center"
+        android:layout_marginTop="5dp"
+        android:text="@string/CameraButtonText"
         android:typeface="sans"/>
 
     <Button
         android:id="@+id/btn_select_gallery"
         android:layout_width="250dp"
         android:layout_height="50dp"
-        android:text="Select from Gallery"
+        android:layout_gravity="center"
         android:layout_marginTop="10dp"
-        android:layout_gravity="center"
+        android:text="@string/GalleryButtonText"
         android:typeface="sans" />
-    <Button
-        android:id="@+id/btn_set_default"
-        android:layout_width="250dp"
-        android:layout_height="50dp"
-        android:text="Select from Gallery"
-        android:layout_marginTop="10dp"
-        android:layout_gravity="center"
-        android:typeface="sans" />
-    <ImageView
-        android:id="@+id/imageView1"
-        android:layout_gravity="center"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+
 </LinearLayout>
 
 
