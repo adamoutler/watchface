@@ -31,6 +31,7 @@ import com.casual_dev.CASUALWatch.R;
 import com.casual_dev.CASUALWatch.widget.MyTextView;
 import com.casual_dev.CASUALWatch.widget.WatchFaceLifecycle;
 import com.casual_dev.casualmessenger.Message;
+import com.casual_dev.casualmessenger.Serialization.SerializableImage;
 import com.casual_dev.casualmessenger.WatchMessaging;
 
 import java.text.SimpleDateFormat;
@@ -211,6 +212,11 @@ public class DigitalWatchfaceActivity extends Activity implements WatchFaceLifec
     public void setDataItems(WatchMessaging wm) {
         setPrimaryText(wm.getObject(Message.ITEMS.TOPTEXTTAG, String.class));
         setSecondaryText(wm.getObject(Message.ITEMS.BOTTOMTEXTTAG, String.class));
+        setBackgroundImage(wm.getObject(Message.ITEMS.BACKGROUNDIMAGE, SerializableImage.class));
+    }
+
+    private void setBackgroundImage(SerializableImage si) {
+        if (null != si) mBackLogo.setImageBitmap(si.getImage());
     }
 
 

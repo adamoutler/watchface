@@ -51,13 +51,16 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
     ProgressBar pb;
     //Uri backgroundURI;
     View.OnClickListener handler = new View.OnClickListener() {
-
         public void onClick(View v) {
-
             switch (v.getId()) {
-
-                case R.id.sendtext:
-                    sendText();
+                case R.id.resetButton:
+                    startProgressSpinning();
+                    Message m = new Message();
+                    m.put(ITEMS.BACKGROUNDIMAGE, "");
+                    m.put(ITEMS.TOPTEXTTAG, "");
+                    m.put(ITEMS.BOTTOMTEXTTAG, "");
+                    sendAction(m).start();
+                    backgroundImage.setImageResource(0);
                     break;
                 case R.id.backgroundpreview:
                     // doStuff
@@ -135,7 +138,7 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
         pb.setProgress(0);
         pb.setVisibility(View.GONE);
         findViewById(R.id.backgroundpreview).setOnClickListener(handler);
-        findViewById(R.id.sendtext).setOnClickListener(handler);
+        findViewById(R.id.resetButton).setOnClickListener(handler);
         Log.d(TAG, "text:" + watchMessaging.getObject(ITEMS.TOPTEXTTAG, String.class));
         backgroundImage = (ImageView) findViewById(R.id.backgroundpreview);
         topText.addTextChangedListener(tw);
@@ -148,7 +151,7 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
     }
 
     Thread sendAction(Message m) {
-        return watchMessaging.send(this.getApplicationContext(), m, uiThreadStopProgressSpinning);
+        return watchMessaging.send(getBaseContext(), m, uiThreadStopProgressSpinning);
     }
 
     private void startProgressSpinning() {

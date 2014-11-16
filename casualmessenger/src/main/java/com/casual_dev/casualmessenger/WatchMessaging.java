@@ -115,10 +115,10 @@ public class WatchMessaging {
         }
 
         for (ITEMS i : message.keySet()) {
-            Object o = message.get(i);
-            if (!o.equals("")) {
-                m.put(i, o);
+            if (m.keySet().contains(i)) {
+                m.remove(i);
             }
+            m.put(i, message.get(i));
         }
 
     }

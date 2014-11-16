@@ -7,5 +7,5 @@
     <string name="app_name">CASUALWear</string>
     <string name="message">The CASUALWear face should already be installed if you have an Android Wear device. You can use this view to customize the watch text</string>
     <string name="CASUALWear">CASUALWear</string>
-    <string name="sendButtonText">send</string>
+    <string name="resetButtonText">reset</string>
 </resources>

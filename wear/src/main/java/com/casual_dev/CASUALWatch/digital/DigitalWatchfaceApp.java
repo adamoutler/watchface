@@ -14,10 +14,11 @@ package com.casual_dev.CASUALWatch.digital;
         limitations under the License.
 */
 
-import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.casual_dev.CASUALWatch.R;
 import com.casual_dev.casualmessenger.Message;
 import com.casual_dev.casualmessenger.Serialization.SerializableImage;
 import com.casual_dev.casualmessenger.observer.MessageObserver;
@@ -46,9 +47,14 @@ public class DigitalWatchfaceApp extends DigitalWatchfaceActions implements Mess
                             break;
                         case BACKGROUNDIMAGE:
                             SerializableImage si = message.get(Message.ITEMS.BACKGROUNDIMAGE, SerializableImage.class);
-                            Bitmap bitmap = si.getImage();
 
-                            mBackLogo.setImageBitmap(bitmap);
+                            if (si != null && si.length() > 1) {
+                                mBackLogo.setImageBitmap(si.getImage());
+                            } else {
+                                mBackLogo.setImageBitmap(BitmapFactory
+                                        .decodeResource(getBaseContext().getResources(), R.drawable.digital_background));
+                            }
+
                             break;
                         default:
                             break;

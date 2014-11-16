@@ -14,11 +14,16 @@ public class SerializableImage implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private static final int NO_IMAGE = -1;
-    public byte[] imagebytes = new byte[]{};
-
+    public byte[] imagebytes;
 
     public SerializableImage(Bitmap bmp) {
         convertToByteArray(bmp);
+    }
+
+    public Integer length() {
+        if (imagebytes == null) return 0;
+
+        return imagebytes.length;
     }
 
     public Bitmap getImage() {
@@ -31,6 +36,7 @@ public class SerializableImage implements Serializable {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         image.compress(Bitmap.CompressFormat.PNG, 100, stream);
         imagebytes = stream.toByteArray();
+
     }
 
 

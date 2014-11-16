@@ -44,14 +44,10 @@ public class ImageGrabber extends Activity {
 
             @Override
             public void onClick(View v) {
-// TODO Auto-generated method stub
                 Intent intent = new Intent();
-// call android default gallery
                 Uri uri = Uri.parse(new File(getFilesDir(), "tempFile").getAbsolutePath());
-
                 intent.setDataAndType(uri, "image/*");
                 intent.setAction(Intent.ACTION_GET_CONTENT);
-// ******** code for crop image
                 intent.putExtra("crop", "true");
                 intent.putExtra("aspectX", 1);
                 intent.putExtra("aspectY", 1);
