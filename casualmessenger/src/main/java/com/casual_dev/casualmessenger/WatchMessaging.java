@@ -28,7 +28,7 @@ import static com.casual_dev.casualmessenger.Message.ITEMS;
 
 
 /**
- * s
+ * provids tools for connecting and sending messages to the DataListenerService on the other side of the connection
  * Created by adamoutler on 11/4/14.
  */
 public class WatchMessaging {

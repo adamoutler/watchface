@@ -9,6 +9,7 @@ import java.io.ObjectOutputStream;
 import java.util.Hashtable;
 
 /**
+ * provides a means of storage for the CASUALMessenger sync operations
  * Created by adamoutler on 11/9/14.
  */
 public class Storage {

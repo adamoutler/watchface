@@ -16,17 +16,19 @@ import java.io.InputStream;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * Handles message receipt from DataListenerService.  This class is instantiated upon validation of
+ * messages from the Listner service.
  * Created by adamoutler on 11/14/14.
  */
 public class MessageReceiver {
     public final static String TAG = "MessageReceiver";
 
-    public void receiveMessage(GoogleApiClient googleApiClient, DataEvent event, String filesDir, byte[] payload) {
+    void receiveMessage(GoogleApiClient googleApiClient, DataEvent event, String filesDir, byte[] payload) {
         WatchMessaging delivery = new WatchMessaging(filesDir);
         try {
             delivery.load();
-        } catch (ClassNotFoundException e) {
-
+        } catch (ClassNotFoundException unused) {
+            //unused   This wont happen
         }
         Message message = decodeDataRequest(googleApiClient, DataMapItem.fromDataItem(event.getDataItem()), delivery);
         try {

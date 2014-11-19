@@ -16,12 +16,13 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * listens for properly tagged data in events and fires up the Receiver if required.
  * Created by adamoutler on 11/3/14.
  */
 public class DataLayerListenerService extends WearableListenerService {
 
     private static final String TAG = "CASUALDataLayerService";
-    public static DataLayerListenerService dataListener;
+    private static DataLayerListenerService dataListener;
 
 
     /**
@@ -31,18 +32,22 @@ public class DataLayerListenerService extends WearableListenerService {
         dataListener = this;
     }
 
-
+    @SuppressWarnings("unused")
     public static DataLayerListenerService getInstance() {
         return dataListener;
     }
 
+    /**
+     * WearableListenerService override.  Provides notification on each data changed event.
+     *
+     * @param dataEvents Data events passed into the method
+     */
     @Override
     public void onDataChanged(DataEventBuffer dataEvents) {
         Log.d(TAG, "onDataChanged: " + dataEvents);
         final List<DataEvent> events = FreezableUtils.freezeIterable(dataEvents);
         GoogleApiClient googleApiClient = new GoogleApiClient.Builder(this).addApi(Wearable.API).build();
         ConnectionResult connectionResult = googleApiClient.blockingConnect(30, TimeUnit.SECONDS);
-        ;
 
         if (!connectionResult.isSuccess()) {
             Log.e(TAG, "Failed to connect to GoogleApiClient.");

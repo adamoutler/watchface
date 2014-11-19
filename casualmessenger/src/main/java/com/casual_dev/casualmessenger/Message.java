@@ -5,6 +5,8 @@ import com.casual_dev.casualmessenger.Serialization.SerializableImage;
 import java.util.Hashtable;
 
 /**
+ *
+ * The message hashtable and its possible values
  * Created by adamoutler on 11/10/14.
  */
 public class Message extends Hashtable<Message.ITEMS, Object> {
@@ -23,7 +25,7 @@ public class Message extends Hashtable<Message.ITEMS, Object> {
         try {
 
             if (nullTest(actualObject)) {
-                actualObject = get(i.name()); //json screws with table
+                actualObject = get(i.name()); //json screws with table so if the first way doesnt work, we try this
                 if (nullTest(actualObject)) {
                     return null;
                 }
