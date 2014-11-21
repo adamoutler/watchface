@@ -31,8 +31,8 @@ import com.casual_dev.CASUALWatch.R;
 import com.casual_dev.CASUALWatch.widget.MyTextView;
 import com.casual_dev.CASUALWatch.widget.WatchFaceLifecycle;
 import com.casual_dev.casualmessenger.Message;
-import com.casual_dev.casualmessenger.Serialization.SerializableImage;
 import com.casual_dev.casualmessenger.WatchMessaging;
+import com.casual_dev.casualmessenger.user_types.SerializableImage;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

@@ -20,8 +20,8 @@ import android.util.Log;
 
 import com.casual_dev.CASUALWatch.R;
 import com.casual_dev.casualmessenger.Message;
-import com.casual_dev.casualmessenger.Serialization.SerializableImage;
 import com.casual_dev.casualmessenger.observer.MessageObserver;
+import com.casual_dev.casualmessenger.user_types.SerializableImage;
 
 public class DigitalWatchfaceApp extends DigitalWatchfaceActions implements MessageObserver.MessageInterface {
     @Override
