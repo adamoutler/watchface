@@ -31,8 +31,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.casual_dev.casualmessenger.Message;
-import com.casual_dev.casualmessenger.Serialization.SerializableImage;
 import com.casual_dev.casualmessenger.WatchMessaging;
+import com.casual_dev.casualmessenger.user_types.SerializableImage;
 import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.io.File;
@@ -60,6 +60,8 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
                     m.put(ITEMS.TOPTEXTTAG, "");
                     m.put(ITEMS.BOTTOMTEXTTAG, "");
                     sendAction(m).start();
+                    topText.setText("");
+                    bottomText.setText("");
                     backgroundImage.setImageResource(0);
                     break;
                 case R.id.backgroundpreview:
@@ -165,7 +167,7 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
         Log.d(TAG, "Sending:" + topText.getText().toString() + " and " + bottomText.getText().toString());
 
         Message message = new Message();
-        message.putObject(ITEMS.BOTTOMTEXTTAG, bottomText.getText().toString());
+        message.put(ITEMS.BOTTOMTEXTTAG, bottomText.getText().toString());
         message.put(ITEMS.TOPTEXTTAG, topText.getText().toString());
         sendAction(message).start();
     }
@@ -175,7 +177,7 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
         Log.d(TAG, "Sending background image");
         Message message = new Message();
         SerializableImage so = new SerializableImage(bmp);
-        message.putObject(ITEMS.BACKGROUNDIMAGE, so);
+        message.put(ITEMS.BACKGROUNDIMAGE, so);
         sendAction(message).start();
     }
 
