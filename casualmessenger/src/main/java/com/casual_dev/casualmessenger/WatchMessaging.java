@@ -4,8 +4,9 @@ package com.casual_dev.casualmessenger;
 import android.content.Context;
 import android.util.Log;
 
-import com.casual_dev.casualmessenger.Serialization.Json;
-import com.casual_dev.casualmessenger.Serialization.Serializer;
+import com.casual_dev.casualmessenger.serialization.Json;
+import com.casual_dev.casualmessenger.serialization.Serializer;
+import com.casual_dev.casualmessenger.serialization.Storage;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.wearable.Asset;
@@ -32,17 +33,34 @@ import static com.casual_dev.casualmessenger.Message.ITEMS;
  * Created by adamoutler on 11/4/14.
  */
 public class WatchMessaging {
+    /**
+     * Filename to store Message to disk
+     */
     public final static String STORAGE = "STORAGE.obj";
+    /**
+     * Path to send message used by server and client to identify messages intended for them
+     */
     public final static String MESSAGEPATH = "/CDEVMessage";
+    /**
+     * random name for the table to be serialized into a Google object
+     */
     public final static String TABLENAME = "Fuzzywuzzy";
     private static final String TAG = "CASUALWatchMessageObject";
+
+    /**
+     * Data folder from getDataFolder();
+     * initialized by constructor
+     */
     public final String dataFolder;
-    Message m = new Message();
+    /**
+     * Message object used by this WatchMessaging
+     */
+    Message currentMessage = new Message();
 
 
     public WatchMessaging(String dataFolder) {
         this.dataFolder = dataFolder;
-        m = createBlankTable();
+        currentMessage = createBlankTable();
         try {
             if (new File(dataFolder, STORAGE).exists() && new File(dataFolder, STORAGE).length() > 1) {
                 Storage.loadMap(this);
@@ -69,16 +87,21 @@ public class WatchMessaging {
         return tempTable;
     }
 
+    /**
+     * gets the current Message as stored in memory
+     *
+     * @return Message object
+     */
     public Message getMessage() {
-        return m;
+        return currentMessage;
     }
 
     public Hashtable<ITEMS, Object> getTable() {
-        return m;
+        return currentMessage;
     }
 
-    void setTable(Message m) {
-        this.m = m;
+    public void setTable(Message m) {
+        this.currentMessage = m;
     }
 
     public void store() throws IOException {
@@ -93,11 +116,11 @@ public class WatchMessaging {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        if (m == null) this.createBlankTable();
+        if (currentMessage == null) this.createBlankTable();
     }
 
     public String getTableJSON() {
-        return Json.encode(m);
+        return Json.encode(currentMessage);
     }
 
     public void setTableAsset(InputStream is) {
@@ -108,17 +131,15 @@ public class WatchMessaging {
             byte[] b = convertInputStreamToByteArray(is);
             message = (Message) Serializer.deserialize(b);
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
 
         for (ITEMS i : message.keySet()) {
-            if (m.keySet().contains(i)) {
-                m.remove(i);
+            if (currentMessage.keySet().contains(i)) {
+                currentMessage.remove(i);
             }
-            m.put(i, message.get(i));
+            currentMessage.put(i, message.get(i));
         }
 
     }
@@ -147,12 +168,12 @@ public class WatchMessaging {
         return bytes;
     }
     public <T> T getObject(ITEMS i, Class<T> c) {
-        return m.get(i, c);
+        return currentMessage.get(i, c);
     }
 
     @SuppressWarnings("unused")
     public void setObject(ITEMS i, Object o) {
-        m.putObject(i, o);
+        currentMessage.put(i, o);
     }
 
 

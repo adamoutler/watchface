@@ -1,15 +1,17 @@
 package com.casual_dev.casualmessenger;
 
-import com.casual_dev.casualmessenger.Serialization.SerializableImage;
+import com.casual_dev.casualmessenger.user_defined.MessageDefinition;
 
-import java.util.Hashtable;
+import java.io.Serializable;
 
 /**
  *
  * The message hashtable and its possible values
  * Created by adamoutler on 11/10/14.
  */
-public class Message extends Hashtable<Message.ITEMS, Object> {
+public class Message extends MessageDefinition implements Serializable {
+
+
     /**
      * gets an object fom the table
      *
@@ -17,6 +19,7 @@ public class Message extends Hashtable<Message.ITEMS, Object> {
      * @param c used for type casting
      * @return Object corresponding to Item, casted as i.type()
      */
+
 
     @SuppressWarnings("unchecked unused")  //very well checked, thanks Android Studio
     public <T> T get(ITEMS i, Class<T> c) {
@@ -42,14 +45,22 @@ public class Message extends Hashtable<Message.ITEMS, Object> {
 
     }
 
-    public Object putObject(ITEMS itemName, Object itemValue) {
+    /**
+     * put an object into the hashtable.
+     *
+     * @param itemName  Key for hashtable.
+     * @param itemValue Value for hashtable.
+     * @return value entered into hashtable
+     */
+    @Override
+    public Object put(ITEMS itemName, Object itemValue) {
         if (values().contains(itemName)) {
             remove(itemName);
         }
-        if (!itemValue.getClass().getName().equals(itemName.type().getName())) {
-            throw new ClassCastException("itemName was " + itemName.type().getName() + " but the value passed in was " + itemValue.getClass().getName());
+        if (!itemValue.getClass().getName().equals(itemName.type().getName()) && !itemValue.equals("")) {
+            throw new ClassCastException("itemName was " + itemName.type().getName() + " but the value` passed in was " + itemValue.getClass().getName());
         }
-        return put(itemName, itemValue);
+        return super.put(itemName, itemValue);
     }
 
     private boolean nullTest(Object o) {
@@ -59,26 +70,12 @@ public class Message extends Hashtable<Message.ITEMS, Object> {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        for (ITEMS i : this.keySet()) {
+        for (ITEMS i : keySet()) {
             sb.append("Item:").append(i).append(" Value:").append(get(i));
         }
         return sb.toString();
     }
 
 
-    public enum ITEMS {
-        BACKGROUNDIMAGE(SerializableImage.class),
-        BOTTOMTEXTTAG(String.class),
-        TOPTEXTTAG(String.class);
 
-        Class myClass;
-
-        ITEMS(Class c) {
-            myClass = c;
-        }
-
-        public Class type() {
-            return myClass;
-        }
-    }
 }
