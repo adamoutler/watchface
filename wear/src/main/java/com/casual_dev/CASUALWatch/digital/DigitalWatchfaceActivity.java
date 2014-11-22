@@ -46,7 +46,7 @@ public class DigitalWatchfaceActivity extends Activity implements WatchFaceLifec
     private final static IntentFilter INTENT_FILTER_TIME;
     private final static IntentFilter INTENT_FILTER_BATTERY;
     static TextView randomness;
-    static ImageView mBackLogo;
+    static ImageView mBackground;
 
     static {
         INTENT_FILTER_BATTERY = new IntentFilter();
@@ -157,14 +157,14 @@ public class DigitalWatchfaceActivity extends Activity implements WatchFaceLifec
         mDevDim = (TextView) findViewById(R.id.devdim);
         mCasual = (TextView) findViewById(R.id.LogoText);
         mCasualDim = (TextView) findViewById(R.id.LogoTextDim);
-        mBackLogo = (ImageView) findViewById(R.id.logo);
+        mBackground = (ImageView) findViewById(R.id.logo);
         WatchMessaging wm = new WatchMessaging(getFilesDir().getAbsolutePath());
         try {
             wm.load();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-        setDataItems(wm);
+        setDataItemsOnStartup(wm);
 
     }
 
@@ -209,14 +209,14 @@ public class DigitalWatchfaceActivity extends Activity implements WatchFaceLifec
     }
 
 
-    public void setDataItems(WatchMessaging wm) {
+    public void setDataItemsOnStartup(WatchMessaging wm) {
         setPrimaryText(wm.getObject(Message.ITEMS.TOPTEXTTAG, String.class));
         setSecondaryText(wm.getObject(Message.ITEMS.BOTTOMTEXTTAG, String.class));
         setBackgroundImage(wm.getObject(Message.ITEMS.BACKGROUNDIMAGE, SerializableImage.class));
     }
 
     private void setBackgroundImage(SerializableImage si) {
-        if (null != si) mBackLogo.setImageBitmap(si.getImage());
+        if (null != si && si.length() > 1) mBackground.setImageBitmap(si.getImage());
     }
 
 

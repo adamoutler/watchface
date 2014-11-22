@@ -1,6 +1,7 @@
 package com.casual_dev.CASUALWatch.analog;
 
 import android.os.Bundle;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.casual_dev.CASUALWatch.R;
@@ -8,6 +9,7 @@ import com.casual_dev.CASUALWatch.widget.WatchFaceLifecycle;
 import com.casual_dev.casualmessenger.Message;
 import com.casual_dev.casualmessenger.WatchMessaging;
 import com.casual_dev.casualmessenger.observer.MessageObserver;
+import com.casual_dev.casualmessenger.user_types.SerializableImage;
 import com.twotoasters.watchface.gears.activity.GearsWatchfaceActivity;
 import com.twotoasters.watchface.gears.widget.IWatchface;
 
@@ -17,6 +19,7 @@ public class AnalogWatchfaceActivity extends GearsWatchfaceActivity implements W
 
     TextView mCASUAL;
     TextView mDev;
+    ImageView mBackground;
 
     public static AnalogWatchfaceActivity getInstance() {
         return instance;
@@ -47,7 +50,7 @@ public class AnalogWatchfaceActivity extends GearsWatchfaceActivity implements W
 
         mCASUAL = (TextView) findViewById(R.id.analogtoptext);
         mDev = (TextView) findViewById(R.id.analogbottomtext);
-
+        mBackground = (ImageView) findViewById(R.id.background);
         WatchMessaging wm = new WatchMessaging(getFilesDir().getAbsolutePath());
         try {
             wm.load();
@@ -74,7 +77,7 @@ public class AnalogWatchfaceActivity extends GearsWatchfaceActivity implements W
 
     @Override
     public void onWatchFaceRemoved() {
-
+        MessageObserver.disconnect(this);
     }
 
     @Override
@@ -85,11 +88,23 @@ public class AnalogWatchfaceActivity extends GearsWatchfaceActivity implements W
 
     public void setDataItems(WatchMessaging wm) {
         setPrimaryText(wm.getObject(Message.ITEMS.TOPTEXTTAG, String.class));
-        setSecondaryText((String) wm.getObject(Message.ITEMS.BOTTOMTEXTTAG, String.class));
+        setSecondaryText(wm.getObject(Message.ITEMS.BOTTOMTEXTTAG, String.class));
+        SerializableImage si = wm.getObject(Message.ITEMS.BACKGROUNDIMAGE, SerializableImage.class);
+        if (si != null && si.length() > 1) {
+            mBackground.setImageBitmap(si.getImage());
+        } else {
+            mBackground.setImageResource(0);
+        }
     }
 
+    public void setBackground(SerializableImage si) {
+        if (si != null && si.length() > 1) {
+            mBackground.setImageBitmap(si.getImage());
+        } else {
+            mBackground.setImageResource(0);
+        }
+    }
     public void setPrimaryText(String s) {
-        ;
         if (null == s || s.isEmpty()) {
             s = "CASUAL";
         }
@@ -97,7 +112,6 @@ public class AnalogWatchfaceActivity extends GearsWatchfaceActivity implements W
     }
 
     public void setSecondaryText(String s) {
-
         if (null == s || s.isEmpty()) {
             s = "DEV";
         }
@@ -108,13 +122,26 @@ public class AnalogWatchfaceActivity extends GearsWatchfaceActivity implements W
 
     @Override
     public void onMessageReceived(final Message message) {
-        runOnUiThread(new Runnable() {
 
+        runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                mCASUAL.setText(message.get(Message.ITEMS.TOPTEXTTAG, String.class));
-                mDev.setText(message.get(Message.ITEMS.BOTTOMTEXTTAG, String.class));
+                for (Message.ITEMS i : message.keySet()) {
+                    switch (i) {
+                        case TOPTEXTTAG:
+                            setPrimaryText(message.get(Message.ITEMS.TOPTEXTTAG, String.class));
+                            break;
+                        case BOTTOMTEXTTAG:
+                            setSecondaryText(message.get(Message.ITEMS.BOTTOMTEXTTAG, String.class));
+                            break;
 
+                        case BACKGROUNDIMAGE:
+                            setBackground(message.get(Message.ITEMS.BACKGROUNDIMAGE, SerializableImage.class));
+                            break;
+                        default:
+                            break;
+                    }
+                }
             }
         });
     }

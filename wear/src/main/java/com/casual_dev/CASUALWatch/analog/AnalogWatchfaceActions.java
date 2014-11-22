@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -36,6 +35,7 @@ public class AnalogWatchfaceActions extends FrameLayout implements IWatchface {
     static Bitmap hand_hour_normal;
     static Bitmap hand_second_dimmed;
     static Bitmap hand_second_normal;
+    static AnalogWatchfaceActions instance;
     @InjectView(R.id.face)
     ImageView face;
     @InjectView(R.id.shadow_overlay)
@@ -50,12 +50,7 @@ public class AnalogWatchfaceActions extends FrameLayout implements IWatchface {
     private boolean mInflated;
     private boolean mActive;
     private Animation animFade;
-    static AnalogWatchfaceActions instance;
 
-
-    public static AnalogWatchfaceActions getInstance() {
-        return instance;
-    }
 
     public AnalogWatchfaceActions(Context context) {
         super(context);
@@ -73,6 +68,10 @@ public class AnalogWatchfaceActions extends FrameLayout implements IWatchface {
         super(context, attrs, defStyle);
         if (isInEditMode()) return;
         init(context, defStyle);
+    }
+
+    public static AnalogWatchfaceActions getInstance() {
+        return instance;
     }
 
     @DebugLog
@@ -166,23 +165,13 @@ public class AnalogWatchfaceActions extends FrameLayout implements IWatchface {
             crossfade(mActive, handSecond, hand_second_dimmed, hand_second_normal);
             handSecond.setVisibility(mActive ? View.VISIBLE : View.INVISIBLE);
         }
-
     }
 
 
-    private void crossfade(boolean transitionToFirstImage, final ImageView v, Bitmap firstImg, Bitmap secondImg) {
-        /*ImageSwitcher is;
-        is = new ImageSwitcher(v.getContext());
-        is.setImageResource(transitionToFirstImage?firstImg:secondImg);
-        is.setFactory(new ViewSwitcher.ViewFactory() {
-            public View makeView() {
-                ImageView myView = new ImageView(v.getContext());
-                return myView;
-            }
-        });*/
+    private BitmapDrawable crossfade(boolean transitionToFirstImage, final ImageView v, Bitmap firstImg, Bitmap secondImg) {
         Log.d(TAG, "fade " + (transitionToFirstImage ? "In" : "out") + " requested.");
 
-        Drawable[] layers = new Drawable[2];
+        BitmapDrawable[] layers = new BitmapDrawable[2];
 
         layers[0] = new BitmapDrawable(getResources(), transitionToFirstImage ? secondImg : firstImg);
         layers[1] = new BitmapDrawable(getResources(), transitionToFirstImage ? firstImg : secondImg);
@@ -191,17 +180,6 @@ public class AnalogWatchfaceActions extends FrameLayout implements IWatchface {
         v.setImageDrawable(transitionDrawable);
         transitionDrawable.setCrossFadeEnabled(true);
         transitionDrawable.startTransition(1000);
-
-
-        //v.setImageResource(transitionToFirstImage?firstImg:secondImg);
-
-
+        return layers[0];
     }
-
-/*
-    private Typeface loadTypeface(int typefaceNameResId) {
-        String typefaceName = getResources().getString(typefaceNameResId);
-        return Typeface.createFromAsset(getContext().getAssets(), typefaceName);
-    }
-    */
 }

@@ -31,6 +31,12 @@ public class DigitalWatchfaceApp extends DigitalWatchfaceActions implements Mess
     }
 
     @Override
+    public void onWatchFaceRemoved() {
+        super.onWatchFaceRemoved();
+        MessageObserver.disconnect(this);
+    }
+
+    @Override
     public void onMessageReceived(final Message message) {
         Log.d("CASUALWEAR", message.toString());
 
@@ -49,9 +55,9 @@ public class DigitalWatchfaceApp extends DigitalWatchfaceActions implements Mess
                             SerializableImage si = message.get(Message.ITEMS.BACKGROUNDIMAGE, SerializableImage.class);
 
                             if (si != null && si.length() > 1) {
-                                mBackLogo.setImageBitmap(si.getImage());
+                                mBackground.setImageBitmap(si.getImage());
                             } else {
-                                mBackLogo.setImageBitmap(BitmapFactory
+                                mBackground.setImageBitmap(BitmapFactory
                                         .decodeResource(getBaseContext().getResources(), R.drawable.digital_background));
                             }
 
