@@ -19,8 +19,8 @@ android {
             jniDebugBuild true
         }
         release {
-            debuggable true
-            jniDebugBuild true
+            debuggable false
+            jniDebugBuild false
             renderscriptDebugBuild true
         }
     }

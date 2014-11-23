@@ -1,4 +1,4 @@
-package com.casual_dev.casualmessenger.Serialization;
+package com.casual_dev.casualmessenger.serialization;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

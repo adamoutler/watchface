@@ -53,7 +53,7 @@ android {
 
     signingConfigs {
         release {
-            storeFile file('C:/Users/Adam/Documents/code/codesigining/adamoutlerisUsernameAndPass.jks')
+            storeFile file('/home/adamoutler/codesigning/adamoutlerIsUsernameAndPass.jks')
             keyAlias 'adamoutler'
             storePassword 'adamoutler'
             keyPassword 'adamoutler'
