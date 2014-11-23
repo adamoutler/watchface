@@ -21,7 +21,7 @@ android {
         release {
             debuggable false
             jniDebugBuild false
-            renderscriptDebugBuild true
+            renderscriptDebugBuild false
         }
     }
 }
