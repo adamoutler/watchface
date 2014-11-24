@@ -3,7 +3,6 @@
 package com.casual_dev.CASUALWatch;
 
 import android.app.Activity;
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -13,7 +12,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-import java.io.File;
 import java.io.IOException;
 
 public class ImageGrabber extends Activity {
@@ -38,46 +36,29 @@ public class ImageGrabber extends Activity {
 
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
-                Uri uri = Uri.parse(new File(getFilesDir(), "tempFile").getAbsolutePath());
-                intent.setDataAndType(uri, "image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                intent.putExtra("crop", "true");
-                intent.putExtra("aspectX", 1);
-                intent.putExtra("aspectY", 1);
-                intent.putExtra("outputX", 400);
-                intent.putExtra("outputY", 400);
-                intent.putExtra("noFaceDetection", true);
-                intent.putExtra("return-data", true);
-
-                try {
-
-                    intent.putExtra("return-data", true);
-                    startActivityForResult(Intent.createChooser(intent,
-                            "Complete action using"), PICK_FROM_GALLERY);
-
-                } catch (ActivityNotFoundException e) {
-// Do nothing for now
-                }
+                dispatchGalleryIntent();
             }
         });
     }
+
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         Intent i = new Intent();
 
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
-            i.putExtra("image", Bitmap.createScaledBitmap((Bitmap) extras.get("data"), 300, 300, false));
+            Bitmap bitmap = (Bitmap) extras.get("data");
+            i.putExtra("image", new ImageScaler().makeImageSquare(320, bitmap));
             setResult(Activity.RESULT_OK, i);
-            Log.d(TAG, "got images");
+            Log.d(TAG, "got image");
             finish();
         }
         if (requestCode == PICK_FROM_GALLERY && resultCode == RESULT_OK) {
             Uri selectedImageUri = data.getData();
             try {
+                Bundle extras = data.getExtras();
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImageUri);
-                i.putExtra("image", Bitmap.createScaledBitmap(bitmap, 300, 300, true));
+                i.putExtra("image", new ImageScaler().makeImageSquare(320, bitmap));
                 setResult(Activity.RESULT_OK, i);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -96,6 +77,13 @@ public class ImageGrabber extends Activity {
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
 
         }
+    }
+
+    private void dispatchGalleryIntent() {
+        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+        photoPickerIntent.setType("image/*");
+        startActivityForResult(photoPickerIntent, PICK_FROM_GALLERY);
+
     }
 }
 
